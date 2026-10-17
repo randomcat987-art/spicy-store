@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Spicy</title>
   <style>
-    /* Default Dark Theme Variables */
     :root {
       --bg: #1c1412;
       --card-bg: #271d1a;
@@ -16,19 +15,6 @@
       --accent-orange: #ea580c;
       --header-bg: #211815;
       --input-bg: #140d0c;
-    }
-
-    /* Refined Warm-Cream Light Theme Variables */
-    body.light-mode {
-      --bg: #f4efe6;
-      --card-bg: #ffffff;
-      --card-border: #dcd3c1;
-      --text-main: #271d1a;
-      --text-muted: #5f554e;
-      --accent-gold: #b45309;
-      --accent-orange: #d97706;
-      --header-bg: #eae3d5;
-      --input-bg: #faf7f2;
     }
 
     * {
@@ -44,15 +30,14 @@
       padding-bottom: 100px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Smooth transitions for interactive elements */
-    button, .nav-tab-btn, .cat-btn, .nav-card, .contact-link-btn, .lang-toggle, .cart-badge-btn, .floating-cart-btn, .back-to-top-btn, .theme-toggle {
+    button, .nav-tab-btn, .cat-btn, .nav-card, .contact-link-btn, .lang-toggle, .cart-badge-btn, .floating-cart-btn, .back-to-top-btn {
       transition: all 0.25s ease-in-out !important;
     }
 
-    .nav-tab-btn:hover, .lang-toggle:hover, .cart-badge-btn:hover, .theme-toggle:hover {
+    .nav-tab-btn:hover, .lang-toggle:hover, .cart-badge-btn:hover {
       background-color: rgba(234, 88, 12, 0.2);
       color: #f59e0b;
     }
@@ -60,16 +45,16 @@
     .nav-card:hover {
       border-color: var(--accent-orange);
       transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
 
     .cat-btn:hover {
       border-color: var(--accent-gold);
-      color: var(--text-main);
+      color: white;
     }
 
     .contact-link-btn:hover {
-      filter: brightness(1.1);
+      filter: brightness(1.15);
       transform: translateY(-2px);
     }
 
@@ -125,11 +110,11 @@
       align-items: center;
     }
 
-    .lang-toggle, .theme-toggle {
+    .lang-toggle {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 0.8rem;
@@ -155,7 +140,7 @@
       display: flex;
       justify-content: center;
       gap: 6px;
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       padding-top: 8px;
     }
 
@@ -188,12 +173,11 @@
     .home-hero {
       text-align: center;
       padding: 40px 16px;
-      background: linear-gradient(rgba(28, 20, 18, 0.8), rgba(28, 20, 18, 0.9)), 
+      background: linear-gradient(rgba(28, 20, 18, 0.75), rgba(28, 20, 18, 0.85)), 
                   url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
       border: 1px solid var(--card-border);
       border-radius: 16px;
       margin-bottom: 20px;
-      color: #f9fafb;
     }
 
     .home-hero h1 {
@@ -269,7 +253,6 @@
       padding: 20px;
       margin-bottom: 16px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .info-card h3 {
@@ -297,22 +280,22 @@
       margin-top: 10px;
     }
     .status-badge.open {
-      background: rgba(22, 163, 74, 0.15);
-      color: #16a34a;
-      border: 1px solid rgba(22, 163, 74, 0.3);
+      background: rgba(22, 163, 74, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(22, 163, 74, 0.4);
     }
     .status-badge.closed {
-      background: rgba(239, 68, 68, 0.15);
-      color: #dc2626;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
     }
     .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
     }
-    .status-badge.open .status-dot { background: #16a34a; box-shadow: 0 0 8px #16a34a; }
-    .status-badge.closed .status-dot { background: #dc2626; }
+    .status-badge.open .status-dot { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+    .status-badge.closed .status-dot { background: #f87171; }
 
     /* Home Navigation Cards */
     .home-nav-cards {
@@ -335,7 +318,6 @@
       padding: 20px;
       text-align: center;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .nav-card h3 {
@@ -370,7 +352,6 @@
       font-weight: bold;
       text-decoration: none;
       margin-bottom: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
 
     /* Interactive Map Frame */
@@ -430,7 +411,7 @@
     }
 
     .search-input::placeholder {
-      color: var(--text-muted);
+      color: #6b7280;
     }
 
     .clear-search-btn {
@@ -472,15 +453,13 @@
       border-radius: 12px;
       font-size: 0.75rem;
       cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
 
     .search-chip:hover {
-      color: var(--text-main);
+      color: white;
       border-color: var(--accent-gold);
     }
 
-    /* Store Filter Row (Categories + Availability Toggle) */
     .store-controls {
       display: flex;
       flex-direction: column;
@@ -499,13 +478,12 @@
     .cat-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      color: var(--text-muted);
+      color: #d1d5db;
       padding: 8px 18px;
       border-radius: 20px;
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
 
     .cat-btn.active {
@@ -514,7 +492,6 @@
       border-color: var(--accent-gold);
     }
 
-    /* Availability Toggle Checkbox */
     .availability-filter {
       display: inline-flex;
       align-items: center;
@@ -526,8 +503,6 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      color: var(--text-main);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
     .availability-filter input {
       accent-color: var(--accent-orange);
@@ -555,8 +530,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-      position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
     .img-container {
@@ -570,8 +544,6 @@
       overflow: hidden;
       margin-bottom: 10px;
       cursor: pointer;
-      position: relative;
-      border: 1px solid var(--card-border);
     }
 
     .img-container img {
@@ -598,7 +570,7 @@
       margin: 0 0 8px 0;
       font-size: 0.95rem;
       font-weight: 800;
-      color: var(--text-main);
+      color: #f3f4f6;
       line-height: 1.25;
     }
 
@@ -625,7 +597,7 @@
       flex: 1;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      color: var(--text-main);
+      color: white;
       padding: 6px 4px;
       border-radius: 6px;
       font-size: 0.75rem;
@@ -648,12 +620,11 @@
     }
 
     .add-btn:disabled {
-      background: #7f1d1d !important;
+      background: #3f1d1d !important;
       color: #f87171;
       cursor: not-allowed;
     }
 
-    /* Skeleton Loader */
     @keyframes pulse {
       0% { opacity: 0.4; }
       50% { opacity: 0.8; }
@@ -672,11 +643,10 @@
       justify-content: space-between;
     }
 
-    .skeleton-img { width: 100%; height: 110px; background: var(--card-border); border-radius: 10px; }
-    .skeleton-line { width: 70%; height: 14px; background: var(--card-border); border-radius: 4px; }
-    .skeleton-line-short { width: 40%; height: 14px; background: var(--card-border); border-radius: 4px; }
+    .skeleton-img { width: 100%; height: 110px; background: #332622; border-radius: 10px; }
+    .skeleton-line { width: 70%; height: 14px; background: #332622; border-radius: 4px; }
+    .skeleton-line-short { width: 40%; height: 14px; background: #332622; border-radius: 4px; }
 
-    /* Micro-Toast Notification */
     .toast-notification {
       position: fixed;
       bottom: 90px;
@@ -688,7 +658,7 @@
       border-radius: 25px;
       font-size: 0.9rem;
       font-weight: bold;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
       z-index: 10000;
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
@@ -703,7 +673,6 @@
       opacity: 1;
     }
 
-    /* Floating Gradient Cart Button */
     .floating-cart-btn {
       position: fixed;
       bottom: 24px;
@@ -717,7 +686,7 @@
       font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.35);
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.45);
       z-index: 9998;
       display: flex;
       justify-content: space-between;
@@ -731,14 +700,13 @@
       }
     }
 
-    /* Round Back-to-Top Floating Button */
     .back-to-top-btn {
       position: fixed;
       bottom: 92px;
       right: 20px;
       width: 44px;
       height: 44px;
-      background: linear-gradient(135deg, #7a3e20 0%, #ea580c 100%);
+      background: linear-gradient(135deg, #5c2c16 0%, #ea580c 100%);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
       border-radius: 50%;
@@ -747,7 +715,7 @@
       justify-content: center;
       font-size: 1.2rem;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       z-index: 9997;
       opacity: 0;
       transform: translateY(20px);
@@ -765,11 +733,10 @@
       filter: brightness(1.15);
     }
 
-    /* Zoom / Product Details Modal */
     .zoom-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px);
       z-index: 10002;
       display: none;
@@ -789,7 +756,6 @@
       padding: 20px;
       text-align: center;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     .zoom-modal-img {
       width: 100%;
@@ -798,14 +764,12 @@
       object-fit: cover;
       background: var(--input-bg);
       margin-bottom: 12px;
-      border: 1px solid var(--card-border);
     }
 
-    /* Cart Pop-Up Modal & Note Box */
     .cart-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(3px);
       z-index: 9999;
       display: none;
@@ -818,13 +782,13 @@
     }
 
     .cart-modal {
-      background: var(--header-bg);
+      background: #211815;
       width: 100%;
       max-width: 600px;
       border-top: 2px solid var(--accent-gold);
       border-radius: 20px 20px 0 0;
       padding: 24px 20px;
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
       animation: slideUp 0.3s ease-out;
     }
 
@@ -837,15 +801,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       border-bottom: 1px solid var(--card-border);
-      padding-bottom: 12px;
+      padding-bottom: 14px;
     }
 
     .modal-header h3 {
       margin: 0;
       font-size: 1.15rem;
-      color: var(--text-main);
     }
 
     .modal-header-actions {
@@ -855,9 +818,9 @@
     }
 
     .clear-cart-btn {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #dc2626;
+      background: #3f1d1d;
+      border: 1px solid #7f1d1d;
+      color: #f87171;
       padding: 5px 10px;
       border-radius: 8px;
       font-size: 0.75rem;
@@ -866,9 +829,9 @@
     }
 
     .close-modal-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
+      background: #382a26;
+      border: none;
+      color: white;
       width: 30px;
       height: 30px;
       border-radius: 50%;
@@ -880,21 +843,21 @@
     }
 
     .cart-items-list {
-      max-height: 35vh;
+      max-height: 45vh;
       overflow-y: auto;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       padding-right: 4px;
     }
 
     .cart-items-list::-webkit-scrollbar { width: 6px; }
     .cart-items-list::-webkit-scrollbar-track { background: transparent; }
-    .cart-items-list::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+    .cart-items-list::-webkit-scrollbar-thumb { background: #382a26; border-radius: 4px; }
 
     .cart-item-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--card-bg);
+      background: #191210;
       border: 1px solid var(--card-border);
       padding: 10px 12px;
       border-radius: 10px;
@@ -902,8 +865,8 @@
     }
 
     .delete-btn {
-      background: rgba(239, 68, 68, 0.15);
-      color: #dc2626;
+      background: #3f1d1d;
+      color: #f87171;
       border: none;
       padding: 6px 10px;
       border-radius: 6px;
@@ -911,7 +874,6 @@
       cursor: pointer;
     }
 
-    /* Custom Spice Blend Note Box */
     .cart-note-container {
       margin-bottom: 14px;
     }
@@ -926,7 +888,7 @@
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      color: var(--text-main);
+      color: white;
       padding: 8px 12px;
       border-radius: 8px;
       font-size: 0.85rem;
@@ -935,7 +897,7 @@
       height: 50px;
     }
     .cart-note-input::placeholder {
-      color: var(--text-muted);
+      color: #6b7280;
     }
 
     .modal-total {
@@ -944,22 +906,21 @@
       align-items: center;
       font-size: 1.1rem;
       font-weight: 800;
-      margin-bottom: 14px;
-      color: var(--text-main);
+      margin-bottom: 16px;
     }
 
     .order-type-container {
       display: flex;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .order-type-btn {
       flex: 1;
       padding: 10px;
       border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--text-muted);
+      background: #170f0e;
+      color: #9ca3af;
       border-radius: 8px;
       font-size: 0.9rem;
       font-weight: 600;
@@ -967,14 +928,14 @@
     }
 
     .order-type-btn.active {
-      background: var(--card-border);
-      color: var(--accent-gold);
-      border-color: var(--accent-gold);
+      background: #382a26;
+      color: #f59e0b;
+      border-color: #f59e0b;
     }
 
     .checkout-btn {
       width: 100%;
-      background: #16a34a;
+      background: #25d366;
       color: white;
       border: none;
       padding: 14px;
@@ -994,22 +955,18 @@
 </head>
 <body>
 
-<!-- Offline Banner -->
 <div class="offline-banner" id="offlineBanner">
   ⚠️ You are currently offline. Displaying cached store data.
 </div>
 
-<!-- Micro-Toast Notification -->
 <div class="toast-notification" id="toastNotification">
   <span>✓</span> <span id="toastText">Added to cart!</span>
 </div>
 
-<!-- Round Back-to-Top Button -->
 <button class="back-to-top-btn" id="backToTopBtn" onclick="scrollToTop()" title="Back to top">
   ↑
 </button>
 
-<!-- Zoom / Product Details Modal -->
 <div class="zoom-modal-overlay" id="zoomModalOverlay" onclick="closeZoomModalOnOutside(event)">
   <div class="zoom-modal-card">
     <button class="close-modal-btn" style="position: absolute; top: 12px; right: 12px;" onclick="closeZoomModal()">✕</button>
@@ -1017,12 +974,10 @@
   </div>
 </div>
 
-<!-- Header with Multi-Tab Navigation -->
 <header class="site-header">
   <div class="top-bar">
     <div class="brand-logo" onclick="switchPage('home')">Spicy 🌶️</div>
     <div class="nav-actions">
-      <button id="themeToggleBtn" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
       <button id="langBtn" class="lang-toggle" onclick="toggleLanguage()">🌐 العربية</button>
       <div class="cart-badge-btn" onclick="toggleCartModal()">🛒 <span id="cartHeaderCount">0</span></div>
     </div>
@@ -1036,7 +991,6 @@
   </nav>
 </header>
 
-<!-- PAGE 1: HOME -->
 <div class="tab-page active" id="page-home">
   <div class="home-hero">
     <h1 id="homeTitle">Welcome to Our Store!</h1>
@@ -1080,7 +1034,6 @@
   </div>
 </div>
 
-<!-- PAGE 2: STORE -->
 <div class="tab-page" id="page-store">
   <div class="hero">
     <h1 id="heroTitle">Store Catalog</h1>
@@ -1092,7 +1045,6 @@
     </div>
   </div>
 
-  <!-- Store Controls: Categories + In-Stock Only Toggle -->
   <div class="store-controls">
     <div class="category-tabs" id="categoryFilter"></div>
     <label class="availability-filter">
@@ -1109,7 +1061,6 @@
   </div>
 </div>
 
-<!-- PAGE 3: FIND US -->
 <div class="tab-page" id="page-find">
   <div class="info-card">
     <h3 id="findTitle">📍 Visit Our Store</h3>
@@ -1125,25 +1076,22 @@
   <a href="https://maps.app.goo.gl/BxDEyNTBuN7WtP6E6" target="_blank" class="contact-link-btn" id="findMapBtn">🗺️ Open Directions in Google Maps</a>
 </div>
 
-<!-- PAGE 4: CONTACT -->
 <div class="tab-page" id="page-contact">
   <div class="info-card">
     <h3 id="contactTitle">📞 Get in Touch</h3>
     <p id="contactDesc">Have questions about bulk wholesale or custom spice blends? Contact us directly!</p>
   </div>
-  <a href="https://wa.me/96171038388" target="_blank" class="contact-link-btn" style="background:#25d366; color:white;" id="btnWa">📲 Chat on WhatsApp</a>
+  <a href="https://wa.me/96171038388" target="_blank" class="contact-link-btn" style="background:#25d366;" id="btnWa">📲 Chat on WhatsApp</a>
   <a href="tel:+96171038388" class="contact-link-btn" id="btnCall">📞 Call Us</a>
-  <a href="https://facebook.com/people/Spicyleb/61574015834403" target="_blank" class="contact-link-btn" style="background:#1877f2; color:white;" id="btnFb">📘 Follow Spicy.leb on Facebook</a>
-  <a href="https://instagram.com/spicy.leb" target="_blank" class="contact-link-btn" style="background:#c13584; color:white;" id="btnIg">📸 Follow @spicy.leb on Instagram</a>
+  <a href="https://facebook.com/people/Spicyleb/61574015834403" target="_blank" class="contact-link-btn" style="background:#1877f2;" id="btnFb">📘 Follow Spicy.leb on Facebook</a>
+  <a href="https://instagram.com/spicy.leb" target="_blank" class="contact-link-btn" style="background:#c13584;" id="btnIg">📸 Follow @spicy.leb on Instagram</a>
 </div>
 
-<!-- Floating Action Button for Cart -->
 <button class="floating-cart-btn" id="floatingCartBtn" style="display:none;" onclick="toggleCartModal()">
   <span>🛒 <span id="floatBtnText">View Cart</span> (<span id="floatCartCount">0</span>)</span>
   <span>$<span id="floatCartTotal">0.00</span></span>
 </button>
 
-<!-- Full Cart Pop-Up Modal -->
 <div class="cart-modal-overlay" id="cartModalOverlay" onclick="closeModalOnOutsideClick(event)">
   <div class="cart-modal">
     
@@ -1155,11 +1103,8 @@
       </div>
     </div>
     
-    <div class="cart-items-list" id="cartItems">
-      <!-- Items inject here -->
-    </div>
+    <div class="cart-items-list" id="cartItems"></div>
 
-    <!-- Custom Spice Blend Note Box -->
     <div class="cart-note-container">
       <label id="lblCartNote" for="cartNoteInput">Special Instructions / Custom Blend Notes:</label>
       <textarea id="cartNoteInput" class="cart-note-input" placeholder="e.g. extra fine grind, less salt..."></textarea>
@@ -1167,7 +1112,7 @@
 
     <div class="modal-total">
       <span id="modalTotalLabel">Total</span>
-      <span style="color:var(--accent-gold);">$<span id="modalCartTotal">0.00</span></span>
+      <span style="color:#f59e0b;">$<span id="modalCartTotal">0.00</span></span>
     </div>
 
     <div class="order-type-container">
@@ -1194,7 +1139,6 @@
   let cart = JSON.parse(localStorage.getItem('spicyCart')) || [];
   let recentSearches = JSON.parse(localStorage.getItem('spicyRecentSearches')) || [];
   let currentLang = 'en';
-  let isDarkMode = true;
   let activeCategory = 'ALL';
   let inStockOnly = false;
   let searchQuery = '';
@@ -1249,16 +1193,8 @@
     }, 2000);
   }
 
-  // Offline Detector
   window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; });
   window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
-
-  // Theme Toggle
-  function toggleTheme() {
-    isDarkMode = !isDarkMode;
-    document.body.classList.toggle('light-mode', !isDarkMode);
-    document.getElementById('themeToggleBtn').innerText = isDarkMode ? '🌙' : '☀️';
-  }
 
   function toggleCartModal() {
     const modal = document.getElementById('cartModalOverlay');
@@ -1309,7 +1245,6 @@
     }
   }
 
-  // Feature: Product Details / Zoom Modal
   function openZoomModal(title, cat, imgUrl, price) {
     const overlay = document.getElementById('zoomModalOverlay');
     const content = document.getElementById('zoomModalContent');
@@ -1319,10 +1254,10 @@
 
     content.innerHTML = `
       ${displayImg}
-      <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; margin-bottom:4px;">${cat}</div>
-      <h2 style="margin: 0 0 8px 0; color:var(--text-main); font-size:1.2rem;">${title}</h2>
-      <div style="font-size:1.1rem; font-weight:800; color:var(--accent-gold); margin-bottom:12px;">$${price.toFixed(2)}</div>
-      <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.4; margin:0;">${currentLang === 'en' ? 'Freshly sourced and packaged with highest quality standards from our store.' : 'تم اختياره وتعبئته بعناية بأعلى معايير الجودة.'}</p>
+      <div style="font-size:0.75rem; text-transform:uppercase; color:#9ca3af; font-weight:700; margin-bottom:4px;">${cat}</div>
+      <h2 style="margin: 0 0 8px 0; color:white; font-size:1.2rem;">${title}</h2>
+      <div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-bottom:12px;">$${price.toFixed(2)}</div>
+      <p style="color:#9ca3af; font-size:0.88rem; line-height:1.4; margin:0;">${currentLang === 'en' ? 'Freshly sourced and packaged with highest quality standards from our store.' : 'تم اختياره وتعبئته بعناية بأعلى معايير الجودة.'}</p>
     `;
     overlay.classList.add('open');
   }
@@ -1337,7 +1272,6 @@
     }
   }
 
-  // Feature: Item Availability Filter Toggle
   function toggleInStockFilter() {
     inStockOnly = document.getElementById('inStockToggle').checked;
     renderProducts();
@@ -1640,7 +1574,7 @@
     });
 
     if (filtered.length === 0) {
-      list.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-muted); padding: 30px;">${currentLang === 'en' ? 'No products found' : 'لم يتم العثور على منتجات'}</p>`;
+      list.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:#9ca3af; padding: 30px;">${currentLang === 'en' ? 'No products found' : 'لم يتم العثور على منتجات'}</p>`;
       return;
     }
 
@@ -1689,7 +1623,7 @@
           <h4 style="${fadeStyle}">${title}</h4>
         </div>
         <div class="card-footer">
-          <div class="price-tag" style="${fadeStyle}">${basePriceText} <small style="font-size:0.68rem; color:var(--text-muted);">/ ${baseUnitLabel}</small></div>
+          <div class="price-tag" style="${fadeStyle}">${basePriceText} <small style="font-size:0.68rem; color:#9ca3af;">/ ${baseUnitLabel}</small></div>
           <div class="card-actions">
             <select class="weight-select" id="weight_${p.id}" ${isDisabled}>
               ${optionsHtml}
@@ -1749,7 +1683,7 @@
     let total = 0;
 
     if (cart.length === 0) {
-      container.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 20px 0;">${currentLang === 'en' ? 'Your cart is empty' : 'سلة التسوق فارغة'}</div>`;
+      container.innerHTML = `<div style="color: #6b7280; text-align: center; padding: 20px 0;">${currentLang === 'en' ? 'Your cart is empty' : 'سلة التسوق فارغة'}</div>`;
     } else {
       cart.forEach(item => {
         const title = currentLang === 'en' ? item.nameEn : item.nameAr;
@@ -1763,8 +1697,8 @@
         row.className = 'cart-item-row';
         row.innerHTML = `
           <div>
-            <strong style="color: var(--text-main);">${title}</strong> <span style="color:var(--text-muted); font-size:0.9rem;">(${weightLabel})</span>
-            <br><span style="color:var(--accent-gold); font-weight:bold; font-size:0.95rem;">$${item.calculatedPrice.toFixed(2)}</span>
+            <strong style="color: #f3f4f6;">${title}</strong> <span style="color:#9ca3af; font-size:0.9rem;">(${weightLabel})</span>
+            <br><span style="color:#f59e0b; font-weight:bold; font-size:0.95rem;">$${item.calculatedPrice.toFixed(2)}</span>
           </div>
           <button class="delete-btn" onclick="deleteFromCart('${item.cartKey}')">
             ✕
