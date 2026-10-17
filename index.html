@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Spicy</title>
+  <style>
+    /* Default Dark Theme Variables */
+    :root {
+      --bg: #1c1412;
+      --card-bg: #271d1a;
+      --card-border: #382a26;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent-gold: #d97706;
+      --accent-orange: #ea580c;
+      --header-bg: #211815;
+      --input-bg: #140d0c;
+    }
+
+    /* Refined Warm-Cream Light Theme Variables */
+    body.light-mode {
+      --bg: #f4efe6;
+      --card-bg: #ffffff;
+      --card-border: #dcd3c1;
+      --text-main: #271d1a;
+      --text-muted: #5f554e;
+      --accent-gold: #b45309;
+      --accent-orange: #d97706;
+      --header-bg: #eae3d5;
+      --input-bg: #faf7f2;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 100px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Smooth transitions for interactive elements */
+    button, .nav-tab-btn, .cat-btn, .nav-card, .contact-link-btn, .lang-toggle, .cart-badge-btn, .floating-cart-btn, .back-to-top-btn, .theme-toggle {
+      transition: all 0.25s ease-in-out !important;
+    }
+
+    .nav-tab-btn:hover, .lang-toggle:hover, .cart-badge-btn:hover, .theme-toggle:hover {
+      background-color: rgba(234, 88, 12, 0.2);
+      color: #f59e0b;
+    }
+
+    .nav-card:hover {
+      border-color: var(--accent-orange);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .cat-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+    }
+
+    .contact-link-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    button:active, .nav-card:active, .contact-link-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Offline Banner */
+    .offline-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #dc2626;
+      color: white;
+      text-align: center;
+      padding: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 10001;
+      display: none;
+    }
+
+    /* Top Navigation Header */
+    .site-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--card-border);
+      padding: 10px 14px;
+      margin: -12px -12px 16px -12px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .brand-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .lang-toggle, .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .cart-badge-btn {
+      background: var(--accent-orange);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Multi-Tab Navigation Bar */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 8px;
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-tab-btn.active {
+      background: var(--accent-orange);
+      color: white;
+    }
+
+    /* Tab Pages */
+    .tab-page {
+      display: none;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    /* Home Hero */
+    .home-hero {
+      text-align: center;
+      padding: 40px 16px;
+      background: linear-gradient(rgba(28, 20, 18, 0.8), rgba(28, 20, 18, 0.9)), 
+                  url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      color: #f9fafb;
+    }
+
+    .home-hero h1 {
+      font-size: 2.2rem;
+      color: #f59e0b;
+      margin: 0 0 10px 0;
+      font-weight: 800;
+    }
+
+    .home-hero p {
+      color: #f3f4f6;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 500px;
+      margin: 0 auto 20px auto;
+    }
+
+    .cta-btn {
+      background: var(--accent-orange);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+    }
+
+    /* Image Carousel Slider */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
+
+    .slide-caption {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+      color: white;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .info-card h3 {
+      color: var(--accent-gold);
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .info-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    /* Store Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    .status-badge.open {
+      background: rgba(22, 163, 74, 0.15);
+      color: #16a34a;
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+    .status-badge.closed {
+      background: rgba(239, 68, 68, 0.15);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .status-badge.open .status-dot { background: #16a34a; box-shadow: 0 0 8px #16a34a; }
+    .status-badge.closed .status-dot { background: #dc2626; }
+
+    /* Home Navigation Cards */
+    .home-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .home-nav-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .nav-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .nav-card h3 {
+      color: var(--accent-gold);
+      margin: 12px 0 6px 0;
+      font-size: 1.1rem;
+    }
+
+    .nav-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .nav-icon {
+      font-size: 2.2rem;
+    }
+
+    .contact-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    /* Interactive Map Frame */
+    .map-frame-container {
+      width: 100%;
+      height: 280px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      margin-bottom: 16px;
+    }
+
+    .map-frame-container iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+    }
+
+    /* Store Catalog Styles */
+    .hero {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      margin: 0 0 4px 0;
+      font-size: 2.0rem;
+      color: var(--accent-gold);
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0 0 16px 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 25px;
+      padding: 12px 40px 12px 20px;
+      color: var(--text-main);
+      font-size: 0.92rem;
+      outline: none;
+      text-align: center;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-border);
+      border: none;
+      color: var(--text-muted);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .clear-search-btn:hover {
+      color: white;
+      background: var(--accent-orange);
+    }
+
+    .recent-searches {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .search-chip {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+
+    .search-chip:hover {
+      color: var(--text-main);
+      border-color: var(--accent-gold);
+    }
+
+    /* Store Filter Row (Categories + Availability Toggle) */
+    .store-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .cat-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+
+    .cat-btn.active {
+      background: var(--accent-gold);
+      color: white;
+      border-color: var(--accent-gold);
+    }
+
+    /* Availability Toggle Checkbox */
+    .availability-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-main);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .availability-filter input {
+      accent-color: var(--accent-orange);
+      cursor: pointer;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 600px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 14px;
+      }
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+      position: relative;
+    }
+
+    .img-container {
+      width: 100%;
+      height: 120px;
+      background: var(--input-bg);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin-bottom: 10px;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid var(--card-border);
+    }
+
+    .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .placeholder-icon {
+      font-size: 2.2rem;
+      opacity: 0.85;
+    }
+
+    .card-cat {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .product-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .card-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .price-tag {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .weight-select {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 4px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .add-btn {
+      background: var(--accent-orange);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .add-btn.added {
+      background: #16a34a !important;
+    }
+
+    .add-btn:disabled {
+      background: #7f1d1d !important;
+      color: #f87171;
+      cursor: not-allowed;
+    }
+
+    /* Skeleton Loader */
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+      100% { opacity: 0.4; }
+    }
+
+    .skeleton-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px;
+      height: 220px;
+      animation: pulse 1.5s infinite ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .skeleton-img { width: 100%; height: 110px; background: var(--card-border); border-radius: 10px; }
+    .skeleton-line { width: 70%; height: 14px; background: var(--card-border); border-radius: 4px; }
+    .skeleton-line-short { width: 40%; height: 14px; background: var(--card-border); border-radius: 4px; }
+
+    /* Micro-Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #16a34a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      z-index: 10000;
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toast-notification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Floating Gradient Cart Button */
+    .floating-cart-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      left: 20px;
+      background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.35);
+      z-index: 9998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (min-width: 600px) {
+      .floating-cart-btn {
+        left: auto;
+        width: 320px;
+      }
+    }
+
+    /* Round Back-to-Top Floating Button */
+    .back-to-top-btn {
+      position: fixed;
+      bottom: 92px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #7a3e20 0%, #ea580c 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      z-index: 9997;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease, filter 0.2s;
+    }
+
+    .back-to-top-btn.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .back-to-top-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    /* Zoom / Product Details Modal */
+    .zoom-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 10002;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .zoom-modal-overlay.open {
+      display: flex;
+    }
+    .zoom-modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .zoom-modal-img {
+      width: 100%;
+      height: 220px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: var(--input-bg);
+      margin-bottom: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Cart Pop-Up Modal & Note Box */
+    .cart-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .cart-modal-overlay.open {
+      display: flex;
+    }
+
+    .cart-modal {
+      background: var(--header-bg);
+      width: 100%;
+      max-width: 600px;
+      border-top: 2px solid var(--accent-gold);
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--text-main);
+    }
+
+    .modal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-cart-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #dc2626;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .close-modal-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .cart-items-list {
+      max-height: 35vh;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      padding-right: 4px;
+    }
+
+    .cart-items-list::-webkit-scrollbar { width: 6px; }
+    .cart-items-list::-webkit-scrollbar-track { background: transparent; }
+    .cart-items-list::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .delete-btn {
+      background: rgba(239, 68, 68, 0.15);
+      color: #dc2626;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    /* Custom Spice Blend Note Box */
+    .cart-note-container {
+      margin-bottom: 14px;
+    }
+    .cart-note-container label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .cart-note-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      resize: none;
+      height: 50px;
+    }
+    .cart-note-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .modal-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--text-main);
+    }
+
+    .order-type-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .order-type-btn {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .order-type-btn.active {
+      background: var(--card-border);
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rtl { direction: rtl; }
+    .rtl .product-card, .rtl .cart-item-row, .rtl .modal-header, .rtl .modal-total { text-align: right; }
+  </style>
+</head>
+<body>
+
+<!-- Offline Banner -->
+<div class="offline-banner" id="offlineBanner">
+  ⚠️ You are currently offline. Displaying cached store data.
+</div>
+
+<!-- Micro-Toast Notification -->
+<div class="toast-notification" id="toastNotification">
+  <span>✓</span> <span id="toastText">Added to cart!</span>
+</div>
+
+<!-- Round Back-to-Top Button -->
+<button class="back-to-top-btn" id="backToTopBtn" onclick="scrollToTop()" title="Back to top">
+  ↑
+</button>
+
+<!-- Zoom / Product Details Modal -->
+<div class="zoom-modal-overlay" id="zoomModalOverlay" onclick="closeZoomModalOnOutside(event)">
+  <div class="zoom-modal-card">
+    <button class="close-modal-btn" style="position: absolute; top: 12px; right: 12px;" onclick="closeZoomModal()">✕</button>
+    <div id="zoomModalContent"></div>
+  </div>
+</div>
+
+<!-- Header with Multi-Tab Navigation -->
+<header class="site-header">
+  <div class="top-bar">
+    <div class="brand-logo" onclick="switchPage('home')">Spicy 🌶️</div>
+    <div class="nav-actions">
+      <button id="themeToggleBtn" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
+      <button id="langBtn" class="lang-toggle" onclick="toggleLanguage()">🌐 العربية</button>
+      <div class="cart-badge-btn" onclick="toggleCartModal()">🛒 <span id="cartHeaderCount">0</span></div>
+    </div>
+  </div>
+
+  <nav class="nav-tabs">
+    <button class="nav-tab-btn active" id="tab-home" onclick="switchPage('home')">Home</button>
+    <button class="nav-tab-btn" id="tab-store" onclick="switchPage('store')">Store</button>
+    <button class="nav-tab-btn" id="tab-find" onclick="switchPage('find')">Find us</button>
+    <button class="nav-tab-btn" id="tab-contact" onclick="switchPage('contact')">Contact</button>
+  </nav>
+</header>
+
+<!-- PAGE 1: HOME -->
+<div class="tab-page active" id="page-home">
+  <div class="home-hero">
+    <h1 id="homeTitle">Welcome to Our Store!</h1>
+    <p id="homeSub">Exceptionally Sourced, Thoughtfully Packed. The finest quality spices, artisanal blends, fresh grains, and nuts in Zgharta.</p>
+    <button class="cta-btn" onclick="switchPage('store')" id="ctaBtn">Shop the Collection!</button>
+  </div>
+
+  <div class="carousel-container">
+    <div class="carousel-slide active" style="background-image: url('https://images.unsplash.com/photo-1532336414038-cf19250c5757?auto=format&fit=crop&w=800&q=80');">
+      <div class="slide-caption" id="slide1-cap">🌿 Fresh & Organic Local Herbs & Spices</div>
+    </div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=800&q=80');">
+      <div class="slide-caption" id="slide2-cap">🥜 Premium Roasted Nuts & Dried Fruits</div>
+    </div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80');">
+      <div class="slide-caption" id="slide3-cap">🌾 Fine Grains, Rice & Traditional Pulses</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3 id="featTitle">✨ Premium Quality & Freshness</h3>
+    <p id="featDesc">We carefully select and pack every spice, nut, and grain to ensure high quality and authentic flavor for your kitchen.</p>
+  </div>
+
+  <div class="home-nav-cards">
+    <div class="nav-card" onclick="switchPage('store')">
+      <div class="nav-icon">🧺</div>
+      <h3 id="navStoreTitle">Shop Catalog</h3>
+      <p id="navStoreDesc">Browse our fresh spices, nuts, and dry goods directly.</p>
+    </div>
+    <div class="nav-card" onclick="switchPage('find')">
+      <div class="nav-icon">📍</div>
+      <h3 id="navFindTitle">Visit Store</h3>
+      <p id="navFindDesc">Find us in Kfar Hatta with our opening hours.</p>
+    </div>
+    <div class="nav-card" onclick="switchPage('contact')">
+      <div class="nav-icon">📞</div>
+      <h3 id="navContactTitle">Get in Touch</h3>
+      <p id="navContactDesc">Contact us for wholesale or custom requests.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: STORE -->
+<div class="tab-page" id="page-store">
+  <div class="hero">
+    <h1 id="heroTitle">Store Catalog</h1>
+    <p id="heroSub">Finest quality spices, blends, grains, and nuts wholesale & retail.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search for spices, nuts, or products..." oninput="handleSearch()">
+      <button class="clear-search-btn" id="clearSearchBtn" onclick="clearSearchInput()" title="Clear search">✕</button>
+      <div class="recent-searches" id="recentSearches"></div>
+    </div>
+  </div>
+
+  <!-- Store Controls: Categories + In-Stock Only Toggle -->
+  <div class="store-controls">
+    <div class="category-tabs" id="categoryFilter"></div>
+    <label class="availability-filter">
+      <input type="checkbox" id="inStockToggle" onchange="toggleInStockFilter()"> 
+      <span id="lblInStockOnly">In Stock Only</span>
+    </label>
+  </div>
+
+  <div class="product-grid" id="productList">
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
+  </div>
+</div>
+
+<!-- PAGE 3: FIND US -->
+<div class="tab-page" id="page-find">
+  <div class="info-card">
+    <h3 id="findTitle">📍 Visit Our Store</h3>
+    <p id="findLocLabel"><strong>Location</strong><br>Kfar Hatta Zgharta District, Lebanon</p>
+    <p style="margin-top: 8px;" id="findHoursLabel">🕒 <strong>Opening Hours:</strong><br>Monday – Saturday: 9:00 AM – 6:00 PM</p>
+    <div id="storeStatusBadge"></div>
+  </div>
+
+  <div class="map-frame-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.648692096984!2d35.897047975429516!3d34.38485437303348!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1521f76363d61629%3A0x4f348ea58103fda5!2sSpicy!5e0!3m2!1sen!2slb!4v1792237029955!5m2!1sen!2slb" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+
+  <a href="https://maps.app.goo.gl/BxDEyNTBuN7WtP6E6" target="_blank" class="contact-link-btn" id="findMapBtn">🗺️ Open Directions in Google Maps</a>
+</div>
+
+<!-- PAGE 4: CONTACT -->
+<div class="tab-page" id="page-contact">
+  <div class="info-card">
+    <h3 id="contactTitle">📞 Get in Touch</h3>
+    <p id="contactDesc">Have questions about bulk wholesale or custom spice blends? Contact us directly!</p>
+  </div>
+  <a href="https://wa.me/96171038388" target="_blank" class="contact-link-btn" style="background:#25d366; color:white;" id="btnWa">📲 Chat on WhatsApp</a>
+  <a href="tel:+96171038388" class="contact-link-btn" id="btnCall">📞 Call Us</a>
+  <a href="https://facebook.com/people/Spicyleb/61574015834403" target="_blank" class="contact-link-btn" style="background:#1877f2; color:white;" id="btnFb">📘 Follow Spicy.leb on Facebook</a>
+  <a href="https://instagram.com/spicy.leb" target="_blank" class="contact-link-btn" style="background:#c13584; color:white;" id="btnIg">📸 Follow @spicy.leb on Instagram</a>
+</div>
+
+<!-- Floating Action Button for Cart -->
+<button class="floating-cart-btn" id="floatingCartBtn" style="display:none;" onclick="toggleCartModal()">
+  <span>🛒 <span id="floatBtnText">View Cart</span> (<span id="floatCartCount">0</span>)</span>
+  <span>$<span id="floatCartTotal">0.00</span></span>
+</button>
+
+<!-- Full Cart Pop-Up Modal -->
+<div class="cart-modal-overlay" id="cartModalOverlay" onclick="closeModalOnOutsideClick(event)">
+  <div class="cart-modal">
+    
+    <div class="modal-header">
+      <h3 id="modalTitle">🛒 Your Cart</h3>
+      <div class="modal-header-actions">
+        <button class="clear-cart-btn" id="clearCartBtnText" onclick="clearEntireCart()">Clear Cart</button>
+        <button class="close-modal-btn" onclick="toggleCartModal()">✕</button>
+      </div>
+    </div>
+    
+    <div class="cart-items-list" id="cartItems">
+      <!-- Items inject here -->
+    </div>
+
+    <!-- Custom Spice Blend Note Box -->
+    <div class="cart-note-container">
+      <label id="lblCartNote" for="cartNoteInput">Special Instructions / Custom Blend Notes:</label>
+      <textarea id="cartNoteInput" class="cart-note-input" placeholder="e.g. extra fine grind, less salt..."></textarea>
+    </div>
+
+    <div class="modal-total">
+      <span id="modalTotalLabel">Total</span>
+      <span style="color:var(--accent-gold);">$<span id="modalCartTotal">0.00</span></span>
+    </div>
+
+    <div class="order-type-container">
+      <button id="btnPickup" class="order-type-btn active" onclick="setOrderType('pickup')">
+        🏪 <span id="lblPickup">Pickup</span>
+      </button>
+      <button id="btnDelivery" class="order-type-btn" onclick="setOrderType('delivery')">
+        🛵 <span id="lblDelivery">Delivery</span>
+      </button>
+    </div>
+
+    <button class="checkout-btn" onclick="checkoutWhatsApp()">
+      <span>📲</span> <span id="checkoutText">Order via WhatsApp</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const STORE_PHONE = "96171038388";
+  const SPREADSHEET_ID = "13oU7HyXIOpSR328p-YESs-2hDWjKJm0x98tWWM8gTH0";
+  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Products`;
+
+  let products = [];
+  let cart = JSON.parse(localStorage.getItem('spicyCart')) || [];
+  let recentSearches = JSON.parse(localStorage.getItem('spicyRecentSearches')) || [];
+  let currentLang = 'en';
+  let isDarkMode = true;
+  let activeCategory = 'ALL';
+  let inStockOnly = false;
+  let searchQuery = '';
+  let orderType = 'pickup';
+  let searchDebounceTimer = null;
+
+  const catTranslations = {
+    'ALL': { en: 'All', ar: 'الكل' },
+    'Dry Goods': { en: 'Dry Goods', ar: 'حبوب ومؤونة' },
+    'Nuts': { en: 'Nuts', ar: 'مكسرات' },
+    'Spices': { en: 'Spices', ar: 'بهارات' },
+    'Spice Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Flavors': { en: 'Flavors', ar: 'نكهات' }
+  };
+
+  const dryGoodsWeightOptions = [
+    { grams: 500, labelEn: '500 g', labelAr: '500 غ' },
+    { grams: 1000, labelEn: '1 kg', labelAr: '1 كغ' },
+    { grams: 2000, labelEn: '2 kg', labelAr: '2 كغ' },
+    { grams: 3000, labelEn: '3 kg', labelAr: '3 كغ' },
+    { grams: 5000, labelEn: '5 kg', labelAr: '5 كغ' },
+    { grams: 10000, labelEn: '10 kg', labelAr: '10 كغ' },
+    { grams: 20000, labelEn: '20 kg', labelAr: '20 كغ' }
+  ];
+
+  const nutsWeightOptions = [
+    { grams: 50, labelEn: '50 g', labelAr: '50 غ' },
+    { grams: 100, labelEn: '100 g', labelAr: '100 غ' },
+    { grams: 200, labelEn: '200 g', labelAr: '200 غ' },
+    { grams: 500, labelEn: '500 g', labelAr: '500 غ' },
+    { grams: 1000, labelEn: '1 kg', labelAr: '1 كغ' },
+    { grams: 2000, labelEn: '2 kg', labelAr: '2 كغ' },
+    { grams: 5000, labelEn: '5 kg', labelAr: '5 كغ' },
+    { grams: 10000, labelEn: '10 kg', labelAr: '10 كغ' }
+  ];
+
+  const spiceWeightOptions = [
+    { grams: 50, labelEn: '50 g', labelAr: '50 غ' },
+    { grams: 100, labelEn: '100 g', labelAr: '100 غ' },
+    { grams: 200, labelEn: '200 g', labelAr: '200 غ' },
+    { grams: 500, labelEn: '500 g', labelAr: '500 غ' },
+    { grams: 1000, labelEn: '1 kg', labelAr: '1 كغ' },
+    { grams: 2000, labelEn: '2 kg', labelAr: '2 كغ' }
+  ];
+
+  function showToast(message) {
+    const toast = document.getElementById('toastNotification');
+    document.getElementById('toastText').innerText = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2000);
+  }
+
+  // Offline Detector
+  window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; });
+  window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
+
+  // Theme Toggle
+  function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('light-mode', !isDarkMode);
+    document.getElementById('themeToggleBtn').innerText = isDarkMode ? '🌙' : '☀️';
+  }
+
+  function toggleCartModal() {
+    const modal = document.getElementById('cartModalOverlay');
+    modal.classList.toggle('open');
+  }
+
+  function closeModalOnOutsideClick(e) {
+    if (e.target.id === 'cartModalOverlay') {
+      toggleCartModal();
+    }
+  }
+
+  function clearEntireCart() {
+    if (cart.length === 0) return;
+    if (confirm(currentLang === 'en' ? 'Are you sure you want to clear your cart?' : 'هل أنت متأكد من رغبتك في تفريغ سلة التسوق؟')) {
+      cart = [];
+      localStorage.removeItem('spicyCart');
+      renderCart();
+      showToast(currentLang === 'en' ? 'Cart cleared' : 'تم تفريغ السلة');
+    }
+  }
+
+  function checkStoreStatus() {
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+
+    const badgeContainer = document.getElementById('storeStatusBadge');
+    if (!badgeContainer) return;
+
+    let isOpen = false;
+    if (day >= 1 && day <= 6 && hour >= 9 && hour < 18) {
+      isOpen = true;
+    }
+
+    if (isOpen) {
+      badgeContainer.innerHTML = `
+        <div class="status-badge open">
+          <div class="status-dot"></div>
+          <span>${currentLang === 'en' ? 'Open Now' : 'مفتوح الآن'}</span>
+        </div>`;
+    } else {
+      badgeContainer.innerHTML = `
+        <div class="status-badge closed">
+          <div class="status-dot"></div>
+          <span>${currentLang === 'en' ? 'Closed – Opens Mon 9 AM' : 'مغلق – يفتح الإثنين 9 صباحاً'}</span>
+        </div>`;
+    }
+  }
+
+  // Feature: Product Details / Zoom Modal
+  function openZoomModal(title, cat, imgUrl, price) {
+    const overlay = document.getElementById('zoomModalOverlay');
+    const content = document.getElementById('zoomModalContent');
+    const displayImg = imgUrl && imgUrl.startsWith('http') 
+      ? `<img src="${imgUrl}" class="zoom-modal-img" alt="${title}">` 
+      : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
+
+    content.innerHTML = `
+      ${displayImg}
+      <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; margin-bottom:4px;">${cat}</div>
+      <h2 style="margin: 0 0 8px 0; color:var(--text-main); font-size:1.2rem;">${title}</h2>
+      <div style="font-size:1.1rem; font-weight:800; color:var(--accent-gold); margin-bottom:12px;">$${price.toFixed(2)}</div>
+      <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.4; margin:0;">${currentLang === 'en' ? 'Freshly sourced and packaged with highest quality standards from our store.' : 'تم اختياره وتعبئته بعناية بأعلى معايير الجودة.'}</p>
+    `;
+    overlay.classList.add('open');
+  }
+
+  function closeZoomModal() {
+    document.getElementById('zoomModalOverlay').classList.remove('open');
+  }
+
+  function closeZoomModalOnOutside(e) {
+    if (e.target.id === 'zoomModalOverlay') {
+      closeZoomModal();
+    }
+  }
+
+  // Feature: Item Availability Filter Toggle
+  function toggleInStockFilter() {
+    inStockOnly = document.getElementById('inStockToggle').checked;
+    renderProducts();
+  }
+
+  function handleSearch() {
+    const inputEl = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    searchQuery = inputEl.value.toLowerCase().trim();
+    
+    if (searchQuery.length > 0) {
+      clearBtn.style.display = 'flex';
+    } else {
+      clearBtn.style.display = 'none';
+    }
+
+    renderProducts();
+
+    clearTimeout(searchDebounceTimer);
+    if (searchQuery.length >= 2) {
+      searchDebounceTimer = setTimeout(() => {
+        if (!recentSearches.includes(searchQuery)) {
+          recentSearches.unshift(searchQuery);
+          if (recentSearches.length > 4) recentSearches.pop();
+          localStorage.setItem('spicyRecentSearches', JSON.stringify(recentSearches));
+          renderRecentSearches();
+        }
+      }, 1000);
+    }
+  }
+
+  function clearSearchInput() {
+    const inputEl = document.getElementById('searchInput');
+    inputEl.value = '';
+    searchQuery = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    renderProducts();
+  }
+
+  function selectRecentSearch(term) {
+    document.getElementById('searchInput').value = term;
+    document.getElementById('clearSearchBtn').style.display = 'flex';
+    searchQuery = term.toLowerCase();
+    renderProducts();
+  }
+
+  function renderRecentSearches() {
+    const container = document.getElementById('recentSearches');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (recentSearches.length === 0) return;
+
+    recentSearches.forEach(term => {
+      const chip = document.createElement('div');
+      chip.className = 'search-chip';
+      chip.innerText = `🕒 ${term}`;
+      chip.onclick = () => selectRecentSearch(term);
+      container.appendChild(chip);
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    const storePage = document.getElementById('page-store');
+    if (storePage && storePage.classList.contains('active')) {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    } else {
+      backToTopBtn.classList.remove('visible');
+    }
+  });
+
+  function scrollToTop() {
+    const filterEl = document.getElementById('categoryFilter');
+    if (filterEl) {
+      filterEl.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  let currentSlide = 0;
+  function startCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 3500);
+  }
+
+  function switchPage(pageName) {
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById(`page-${pageName}`).classList.add('active');
+    document.getElementById(`tab-${pageName}`).classList.add('active');
+
+    const floatingBtn = document.getElementById('floatingCartBtn');
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    if (pageName === 'store') {
+      floatingBtn.style.display = 'flex';
+    } else {
+      floatingBtn.style.display = 'none';
+      backToTopBtn.classList.remove('visible');
+    }
+
+    if (pageName === 'find') {
+      checkStoreStatus();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function getFallbackPrice(category) {
+    if (category === "Dry Goods") return 2.50;
+    if (category === "Nuts") return 6.00;
+    if (category === "Spices") return 4.00;
+    return 3.00;
+  }
+
+  async function loadInventory() {
+    try {
+      const response = await fetch(CSV_URL);
+      const csvText = await response.text();
+      parseCSV(csvText);
+    } catch (e) {
+      console.error("Failed to load inventory CSV:", e);
+      document.getElementById('productList').innerHTML = '<p style="color:#ef4444; text-align:center; grid-column:1/-1;">Failed to load catalog.</p>';
+    }
+  }
+
+  function parseCSV(text) {
+    const lines = text.split('\n');
+    products = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      
+      const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      if (cols.length >= 4) {
+        const id = cols[0].replace(/"/g, '').trim();
+        const nameAr = cols[1].replace(/"/g, '').trim();
+        const category = cols[2].replace(/"/g, '').trim();
+        const unitRaw = cols[3].replace(/"/g, '').trim();
+        
+        let price = 0.00;
+        if (cols[4]) {
+          const cleanPrice = parseFloat(cols[4].replace(/"/g, '').replace('$', '').trim());
+          if (!isNaN(cleanPrice) && cleanPrice > 0) price = cleanPrice;
+        }
+
+        let imgUrl = '';
+        if (cols[5]) {
+          imgUrl = cols[5].replace(/"/g, '').trim();
+        }
+
+        if (price === 0.00) price = getFallbackPrice(category);
+
+        let baseGrams = 200;
+        if (unitRaw.includes("1 kg") || category === "Dry Goods") baseGrams = 1000;
+
+        let isOut = cols.some(c => c && c.replace(/"/g, '').trim().toUpperCase() === 'OUT');
+
+        products.push({
+          id: id,
+          nameEn: id.replace(/_/g, ' '),
+          nameAr: nameAr,
+          category: category || 'General',
+          imgUrl: imgUrl,
+          baseGrams: baseGrams,
+          basePrice: price,
+          isOut: isOut
+        });
+      }
+    }
+    renderCategoryFilters();
+    renderProducts();
+  }
+
+  function setOrderType(type) {
+    orderType = type;
+    document.getElementById('btnPickup').classList.toggle('active', type === 'pickup');
+    document.getElementById('btnDelivery').classList.toggle('active', type === 'delivery');
+  }
+
+  function renderCategoryFilters() {
+    const categories = ['ALL', ...new Set(products.map(p => p.category))];
+    const filterContainer = document.getElementById('categoryFilter');
+    filterContainer.innerHTML = '';
+
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = `cat-btn ${cat === activeCategory ? 'active' : ''}`;
+      
+      const translatedCat = catTranslations[cat] 
+        ? (currentLang === 'en' ? catTranslations[cat].en : catTranslations[cat].ar)
+        : cat;
+
+      btn.innerText = translatedCat;
+      btn.onclick = () => {
+        activeCategory = cat;
+        renderCategoryFilters();
+        renderProducts();
+      };
+      filterContainer.appendChild(btn);
+    });
+  }
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    document.body.classList.toggle('rtl', currentLang === 'ar');
+    document.getElementById('langBtn').innerText = currentLang === 'en' ? '🌐 العربية' : '🌐 English';
+    
+    document.getElementById('tab-home').innerText = currentLang === 'en' ? 'Home' : 'الرئيسية';
+    document.getElementById('tab-store').innerText = currentLang === 'en' ? 'Store' : 'المتجر';
+    document.getElementById('tab-find').innerText = currentLang === 'en' ? 'Find us' : 'موقعنا';
+    document.getElementById('tab-contact').innerText = currentLang === 'en' ? 'Contact' : 'تواصل معنا';
+
+    document.getElementById('homeTitle').innerText = currentLang === 'en' ? 'Welcome to Our Store!' : 'أهلاً بكم في متجرنا!';
+    document.getElementById('homeSub').innerText = currentLang === 'en' 
+      ? 'Exceptionally Sourced, Thoughtfully Packed. The finest quality spices, artisanal blends, fresh grains, and nuts in Zgharta.' 
+      : 'أجود أنواع البهارات والمكسرات والحبوب والمؤونة بالجملة والمفرق في زغرتا.';
+    document.getElementById('ctaBtn').innerText = currentLang === 'en' ? 'Shop the Collection!' : 'تصفح المجموعة!';
+
+    document.getElementById('slide1-cap').innerText = currentLang === 'en' ? '🌿 Fresh & Organic Local Herbs & Spices' : '🌿 أعشاب وبهارات محلية طازجة وعضوية';
+    document.getElementById('slide2-cap').innerText = currentLang === 'en' ? '🥜 Premium Roasted Nuts & Dried Fruits' : '🥜 مكسرات محمصة وفواكه مجففة فاخرة';
+    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌾 Fine Grains, Rice & Traditional Pulses' : '🌾 حبوب، أرز، وبقوليات تقليدية فاخرة';
+
+    document.getElementById('featTitle').innerText = currentLang === 'en' ? '✨ Premium Quality & Freshness' : '✨ جودة ونضارة عالية';
+    document.getElementById('featDesc').innerText = currentLang === 'en' 
+      ? 'We carefully select and pack every spice, nut, and grain to ensure high quality and authentic flavor for your kitchen.' 
+      : 'نختار ونعبئ كل نوع من البهارات والمكسرات والحبوب بعناية لضمان الجودة والنكهة الأصيلة لمطبخك.';
+
+    document.getElementById('navStoreTitle').innerText = currentLang === 'en' ? 'Shop Catalog' : 'تصفح المتجر';
+    document.getElementById('navStoreDesc').innerText = currentLang === 'en' ? 'Browse our fresh spices, nuts, and dry goods directly.' : 'تصفح البهارات، المكسرات والحبوب الطازجة مباشرة.';
+    document.getElementById('navFindTitle').innerText = currentLang === 'en' ? 'Visit Store' : 'زورونا';
+    document.getElementById('navFindDesc').innerText = currentLang === 'en' ? 'Find us in Kfar Hatta with our opening hours.' : 'تفضلوا بزيارتنا في كفرحاتا وتعرفوا على أوقات العمل.';
+    document.getElementById('navContactTitle').innerText = currentLang === 'en' ? 'Get in Touch' : 'تواصل معنا';
+    document.getElementById('navContactDesc').innerText = currentLang === 'en' ? 'Contact us for wholesale or custom requests.' : 'تواصل معنا للطلبات بالجملة أو الخاصة.';
+
+    document.getElementById('heroTitle').innerText = currentLang === 'en' ? 'Store Catalog' : 'تصفح المتجر';
+    document.getElementById('heroSub').innerText = currentLang === 'en' 
+      ? 'Finest quality spices, blends, grains, and nuts wholesale & retail.' 
+      : 'أجود أنواع البهارات والمكسرات والحبوب والمؤونة بالجملة والمفرق.';
+    document.getElementById('searchInput').placeholder = currentLang === 'en' 
+      ? 'Search for spices, nuts, or products...' 
+      : 'إبحث عن البهارات، المكسرات، أو المنتجات...';
+    document.getElementById('lblInStockOnly').innerText = currentLang === 'en' ? 'In Stock Only' : 'المتوفر فقط';
+    
+    document.getElementById('findTitle').innerText = currentLang === 'en' ? '📍 Visit Our Store' : '📍 قم بزيارة متجرنا';
+    document.getElementById('findLocLabel').innerHTML = currentLang === 'en' 
+      ? '<strong>Location</strong><br>Kfar Hatta Zgharta District, Lebanon' 
+      : '<strong>الموقع</strong><br>كفرحاتا قضاء زغرتا، لبنان';
+    document.getElementById('findHoursLabel').innerHTML = currentLang === 'en' 
+      ? '🕒 <strong>Opening Hours:</strong><br>Monday – Saturday: 9:00 AM – 6:00 PM' 
+      : '🕒 <strong>أوقات العمل:</strong><br>الإثنين – السبت: 9:00 صباحاً – 6:00 مساءً';
+    document.getElementById('findMapBtn').innerText = currentLang === 'en' ? '🗺️ Open Directions in Google Maps' : '🗺️ افتح الاتجاهات في خرائط جوجل';
+
+    document.getElementById('contactTitle').innerText = currentLang === 'en' ? '📞 Get in Touch' : '📞 تواصل معنا';
+    document.getElementById('contactDesc').innerText = currentLang === 'en' 
+      ? 'Have questions about bulk wholesale or custom spice blends? Contact us directly!' 
+      : 'هل لديك أسئلة حول طلبات الجملة أو خلطات البهارات الخاصة؟ تواصل معنا مباشرة!';
+    document.getElementById('btnWa').innerHTML = currentLang === 'en' ? '📲 Chat on WhatsApp' : '📲 تواصل عبر واتساب';
+    document.getElementById('btnCall').innerHTML = currentLang === 'en' ? '📞 Call Us' : '📞 اتصل بنا';
+    document.getElementById('btnFb').innerHTML = currentLang === 'en' ? '📘 Follow Spicy.leb on Facebook' : '📘 تابع Spicy.leb على فيسبوك';
+    document.getElementById('btnIg').innerHTML = currentLang === 'en' ? '📸 Follow @spicy.leb on Instagram' : '📸 تابع @spicy.leb على إنستغرام';
+
+    document.getElementById('floatBtnText').innerText = currentLang === 'en' ? 'View Cart' : 'عرض السلة';
+    document.getElementById('modalTitle').innerText = currentLang === 'en' ? '🛒 Your Cart' : '🛒 سلة التسوق الخاصة بك';
+    document.getElementById('clearCartBtnText').innerText = currentLang === 'en' ? 'Clear Cart' : 'تفريغ السلة';
+    document.getElementById('lblCartNote').innerText = currentLang === 'en' ? 'Special Instructions / Custom Blend Notes:' : 'تعليمات خاصة / ملاحظات الخلطة:';
+    document.getElementById('cartNoteInput').placeholder = currentLang === 'en' ? 'e.g. extra fine grind, less salt...' : 'مثلاً: طحن ناعم جداً، ملح أقل...';
+    document.getElementById('modalTotalLabel').innerText = currentLang === 'en' ? 'Total' : 'المجموع';
+    document.getElementById('checkoutText').innerText = currentLang === 'en' ? 'Order via WhatsApp' : 'أطلب عبر واتساب';
+    document.getElementById('lblPickup').innerText = currentLang === 'en' ? 'Pickup' : 'استلام من المحل';
+    document.getElementById('lblDelivery').innerText = currentLang === 'en' ? 'Delivery' : 'توصيل';
+    
+    renderCategoryFilters();
+    renderProducts();
+    renderCart();
+    checkStoreStatus();
+  }
+
+  function renderProducts() {
+    const list = document.getElementById('productList');
+    list.innerHTML = '';
+
+    const filtered = products.filter(p => {
+      const matchesCat = activeCategory === 'ALL' || p.category === activeCategory;
+      const matchesSearch = p.nameEn.toLowerCase().includes(searchQuery) || p.nameAr.includes(searchQuery);
+      const matchesStock = inStockOnly ? !p.isOut : true;
+      return matchesCat && matchesSearch && matchesStock;
+    });
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-muted); padding: 30px;">${currentLang === 'en' ? 'No products found' : 'لم يتم العثور على منتجات'}</p>`;
+      return;
+    }
+
+    filtered.forEach(p => {
+      const title = currentLang === 'en' ? p.nameEn : p.nameAr;
+      const baseUnitLabel = p.baseGrams === 1000 ? (currentLang === 'en' ? '1 kg' : '1 كغ') : (currentLang === 'en' ? '200 g' : '200 غ');
+      const basePriceText = `$${p.basePrice.toFixed(2)}`;
+
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      
+      let optionsArray = spiceWeightOptions;
+      if (p.category === "Dry Goods") {
+        optionsArray = dryGoodsWeightOptions;
+      } else if (p.category === "Nuts") {
+        optionsArray = nutsWeightOptions;
+      }
+
+      let optionsHtml = '';
+      optionsArray.forEach(opt => {
+        const selected = opt.grams === p.baseGrams ? 'selected' : '';
+        const optLabel = currentLang === 'en' ? opt.labelEn : opt.labelAr;
+        optionsHtml += `<option value="${opt.grams}" ${selected}>${optLabel}</option>`;
+      });
+
+      const displayCategory = catTranslations[p.category] 
+        ? (currentLang === 'en' ? catTranslations[p.category].en : catTranslations[p.category].ar)
+        : p.category;
+
+      const imageMarkup = p.imgUrl && p.imgUrl.startsWith('http')
+        ? `<img src="${p.imgUrl}" alt="${title}">`
+        : `<span class="placeholder-icon">🌾</span>`;
+
+      const btnText = p.isOut 
+        ? (currentLang === 'en' ? 'Out of Stock' : 'نفدت الكمية') 
+        : (currentLang === 'en' ? 'Add' : 'إضافة');
+      const isDisabled = p.isOut ? 'disabled' : '';
+      const fadeStyle = p.isOut ? 'opacity: 0.4;' : '';
+
+      card.innerHTML = `
+        <div>
+          <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${title.replace(/'/g, "\\'")}', '${displayCategory}', '${p.imgUrl}', ${p.basePrice})">
+            ${imageMarkup}
+          </div>
+          <div class="card-cat">${displayCategory}</div>
+          <h4 style="${fadeStyle}">${title}</h4>
+        </div>
+        <div class="card-footer">
+          <div class="price-tag" style="${fadeStyle}">${basePriceText} <small style="font-size:0.68rem; color:var(--text-muted);">/ ${baseUnitLabel}</small></div>
+          <div class="card-actions">
+            <select class="weight-select" id="weight_${p.id}" ${isDisabled}>
+              ${optionsHtml}
+            </select>
+            <button class="add-btn" id="btn_add_${p.id}" onclick="addToCart('${p.id}', this)" ${isDisabled}>
+              ${btnText}
+            </button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function addToCart(productId, btnEl) {
+    const item = products.find(p => p.id === productId);
+    const selectedGrams = parseInt(document.getElementById(`weight_${productId}`).value);
+    
+    const calculatedPrice = (item.basePrice / item.baseGrams) * selectedGrams;
+    const cartKey = `${productId}_${selectedGrams}`;
+
+    const existing = cart.find(c => c.cartKey === cartKey);
+    if (!existing) {
+      cart.push({
+        cartKey: cartKey,
+        id: productId,
+        nameEn: item.nameEn,
+        nameAr: item.nameAr,
+        selectedGrams: selectedGrams,
+        calculatedPrice: calculatedPrice
+      });
+    }
+
+    btnEl.classList.add('added');
+    btnEl.innerText = '✓';
+    setTimeout(() => {
+      btnEl.classList.remove('added');
+      btnEl.innerText = currentLang === 'en' ? 'Add' : 'إضافة';
+    }, 1000);
+
+    const itemName = currentLang === 'en' ? item.nameEn : item.nameAr;
+    showToast(currentLang === 'en' ? `Added ${itemName} to cart!` : `تمت إضافة ${itemName} إلى السلة!`);
+
+    localStorage.setItem('spicyCart', JSON.stringify(cart));
+    renderCart();
+  }
+
+  function deleteFromCart(cartKey) {
+    cart = cart.filter(c => c.cartKey !== cartKey);
+    localStorage.setItem('spicyCart', JSON.stringify(cart));
+    renderCart();
+  }
+
+  function renderCart() {
+    const container = document.getElementById('cartItems');
+    container.innerHTML = '';
+    let total = 0;
+
+    if (cart.length === 0) {
+      container.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 20px 0;">${currentLang === 'en' ? 'Your cart is empty' : 'سلة التسوق فارغة'}</div>`;
+    } else {
+      cart.forEach(item => {
+        const title = currentLang === 'en' ? item.nameEn : item.nameAr;
+        const weightLabel = item.selectedGrams >= 1000 
+          ? `${item.selectedGrams/1000} ${currentLang === 'en' ? 'kg' : 'كغ'}`
+          : `${item.selectedGrams} ${currentLang === 'en' ? 'g' : 'غ'}`;
+        
+        total += item.calculatedPrice;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item-row';
+        row.innerHTML = `
+          <div>
+            <strong style="color: var(--text-main);">${title}</strong> <span style="color:var(--text-muted); font-size:0.9rem;">(${weightLabel})</span>
+            <br><span style="color:var(--accent-gold); font-weight:bold; font-size:0.95rem;">$${item.calculatedPrice.toFixed(2)}</span>
+          </div>
+          <button class="delete-btn" onclick="deleteFromCart('${item.cartKey}')">
+            ✕
+          </button>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    document.getElementById('cartHeaderCount').innerText = cart.length;
+    document.getElementById('floatCartCount').innerText = cart.length;
+    document.getElementById('floatCartTotal').innerText = total.toFixed(2);
+    document.getElementById('modalCartTotal').innerText = total.toFixed(2);
+  }
+
+  function checkoutWhatsApp() {
+    if (cart.length === 0) {
+      alert(currentLang === 'en' ? 'Your cart is empty!' : 'سلة التسوق فارغة!');
+      return;
+    }
+
+    let isAr = currentLang === 'ar';
+    let typeText = orderType === 'delivery' 
+      ? (isAr ? "توصيل (Delivery)" : "Delivery (توصيل)")
+      : (isAr ? "استلام من المحل (Pickup)" : "Pickup (استلام)");
+
+    let text = isAr 
+      ? `مرحبا، أريد تقديم طلب جديد [${typeText}]:\n\n` 
+      : `Hello! I would like to place a new order [${typeText}]:\n\n`;
+
+    cart.forEach(item => {
+      const title = isAr ? item.nameAr : item.nameEn;
+      const weightLabel = item.selectedGrams >= 1000 
+        ? `${item.selectedGrams/1000} ${isAr ? 'كغ' : 'kg'}`
+        : `${item.selectedGrams} ${isAr ? 'غ' : 'g'}`;
+
+      text += `• ${title} (${weightLabel})\n`;
+    });
+
+    const customNote = document.getElementById('cartNoteInput').value.trim();
+    if (customNote) {
+      text += isAr ? `\n*ملاحظات:* ${customNote}\n` : `\n*Special Notes:* ${customNote}\n`;
+    }
+
+    text += isAr ? `\n*نوع الطلب:* ${typeText}` : `\n*Order Type:* ${typeText}`;
+
+    const url = `https://wa.me/${STORE_PHONE}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    
+    cart = [];
+    localStorage.removeItem('spicyCart');
+    document.getElementById('cartNoteInput').value = '';
+    renderCart();
+    toggleCartModal();
+  }
+
+  renderCart();
+  renderRecentSearches();
+  loadInventory();
+  startCarousel();
+</script>
+
+</body>
+</html>
