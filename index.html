@@ -27,12 +27,11 @@
       color: var(--text-main);
       margin: 0;
       padding: 12px;
-      padding-bottom: 100px;
+      padding-bottom: 24px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow-x: hidden;
     }
 
-    /* Smooth transitions for interactive elements */
     button, .nav-tab-btn, .cat-btn, .nav-card, .contact-link-btn, .lang-toggle, .cart-badge-btn, .floating-cart-btn, .back-to-top-btn {
       transition: all 0.25s ease-in-out !important;
     }
@@ -42,10 +41,79 @@
       color: #f59e0b;
     }
 
+    /* 3D Gradient Buttons for Home Page */
+    .home-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .home-nav-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .nav-card {
+      background: linear-gradient(145deg, #3d241d 0%, #1f1412 100%);
+      border: 1px solid #57372d;
+      border-radius: 14px;
+      padding: 18px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transform: translateY(0);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-card h3 {
+      color: #f59e0b;
+      margin: 8px 0 4px 0;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .nav-card p {
+      color: #9ca3af;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      margin: 0;
+      padding-right: 20px;
+    }
+
+    .nav-icon {
+      font-size: 1.8rem;
+    }
+
+    .nav-card::after {
+      content: '➔';
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #d97706;
+      font-size: 1rem;
+      opacity: 0.7;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
     .nav-card:hover {
-      border-color: var(--accent-orange);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      border-color: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-card:hover::after {
+      transform: translateY(-50%) translateX(3px);
+      opacity: 1;
+    }
+
+    .nav-card:active {
+      transform: scale(0.97);
+      background: linear-gradient(145deg, #2e1b15 0%, #17100e 100%);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
 
     .cat-btn:hover {
@@ -58,11 +126,10 @@
       transform: translateY(-2px);
     }
 
-    button:active, .nav-card:active, .contact-link-btn:active {
-      transform: scale(0.97);
+    button:active, .contact-link-btn:active {
+      transform: scale(0.98);
     }
 
-    /* Offline Banner */
     .offline-banner {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -76,7 +143,6 @@
       display: none;
     }
 
-    /* Top Navigation Header */
     .site-header {
       background: var(--header-bg);
       border-bottom: 1px solid var(--card-border);
@@ -135,7 +201,6 @@
       cursor: pointer;
     }
 
-    /* Multi-Tab Navigation Bar */
     .nav-tabs {
       display: flex;
       justify-content: center;
@@ -160,7 +225,6 @@
       color: white;
     }
 
-    /* Tab Pages */
     .tab-page {
       display: none;
     }
@@ -169,12 +233,12 @@
       display: block;
     }
 
-    /* Home Hero */
+    /* Uses hero-bg.jpg */
     .home-hero {
       text-align: center;
       padding: 40px 16px;
       background: linear-gradient(rgba(28, 20, 18, 0.75), rgba(28, 20, 18, 0.85)), 
-                  url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
+                  url('hero-bg.jpg') center/cover no-repeat;
       border: 1px solid var(--card-border);
       border-radius: 16px;
       margin-bottom: 20px;
@@ -207,7 +271,6 @@
       box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
     }
 
-    /* Image Carousel Slider */
     .carousel-container {
       position: relative;
       width: 100%;
@@ -268,7 +331,6 @@
       margin-bottom: 0;
     }
 
-    /* Store Status Badge */
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -297,46 +359,6 @@
     .status-badge.open .status-dot { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
     .status-badge.closed .status-dot { background: #f87171; }
 
-    /* Home Navigation Cards */
-    .home-nav-cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    @media (min-width: 600px) {
-      .home-nav-cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .nav-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .nav-card h3 {
-      color: var(--accent-gold);
-      margin: 12px 0 6px 0;
-      font-size: 1.1rem;
-    }
-
-    .nav-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      line-height: 1.4;
-      margin: 0;
-    }
-
-    .nav-icon {
-      font-size: 2.2rem;
-    }
-
     .contact-link-btn {
       display: inline-flex;
       align-items: center;
@@ -354,7 +376,6 @@
       margin-bottom: 10px;
     }
 
-    /* Interactive Map Frame */
     .map-frame-container {
       width: 100%;
       height: 280px;
@@ -370,7 +391,6 @@
       border: 0;
     }
 
-    /* Store Catalog Styles */
     .hero {
       text-align: center;
       margin-top: 20px;
@@ -729,10 +749,6 @@
       pointer-events: auto;
     }
 
-    .back-to-top-btn:hover {
-      filter: brightness(1.15);
-    }
-
     .zoom-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -849,10 +865,6 @@
       padding-right: 4px;
     }
 
-    .cart-items-list::-webkit-scrollbar { width: 6px; }
-    .cart-items-list::-webkit-scrollbar-track { background: transparent; }
-    .cart-items-list::-webkit-scrollbar-thumb { background: #382a26; border-radius: 4px; }
-
     .cart-item-row {
       display: flex;
       justify-content: space-between;
@@ -895,9 +907,6 @@
       outline: none;
       resize: none;
       height: 50px;
-    }
-    .cart-note-input::placeholder {
-      color: #6b7280;
     }
 
     .modal-total {
@@ -998,15 +1007,16 @@
     <button class="cta-btn" onclick="switchPage('store')" id="ctaBtn">Shop the Collection!</button>
   </div>
 
+  <!-- Carousel using carousel-1.jpg, carousel-2.jpg, carousel-3.jpg -->
   <div class="carousel-container">
-    <div class="carousel-slide active" style="background-image: url('https://images.unsplash.com/photo-1532336414038-cf19250c5757?auto=format&fit=crop&w=800&q=80');">
-      <div class="slide-caption" id="slide1-cap">🌿 Fresh & Organic Local Herbs & Spices</div>
+    <div class="carousel-slide active" style="background-image: url('carousel-1.jpg');">
+      <div class="slide-caption" id="slide1-cap">🍯 Premium Natural Dates, Figs & Dried Fruits</div>
     </div>
-    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=800&q=80');">
-      <div class="slide-caption" id="slide2-cap">🥜 Premium Roasted Nuts & Dried Fruits</div>
+    <div class="carousel-slide" style="background-image: url('carousel-2.jpg');">
+      <div class="slide-caption" id="slide2-cap">🥜 Freshly Roasted Nuts & Crunchy Snacks</div>
     </div>
-    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80');">
-      <div class="slide-caption" id="slide3-cap">🌾 Fine Grains, Rice & Traditional Pulses</div>
+    <div class="carousel-slide" style="background-image: url('carousel-3.jpg');">
+      <div class="slide-caption" id="slide3-cap">🌿 Authentic Spices & Traditional Pantry Goods</div>
     </div>
   </div>
 
@@ -1032,6 +1042,14 @@
       <p id="navContactDesc">Contact us for wholesale or custom requests.</p>
     </div>
   </div>
+
+  <!-- Copyright Footer -->
+  <footer style="text-align: center; padding: 20px 10px; margin-top: 30px; border-top: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.8rem;">
+    <p style="margin: 0 0 6px 0;">© 2026 Spicy. All rights reserved.</p>
+    <p style="margin: 0;">
+      <a href="#" onclick="openTermsModal(); return false;" style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">Terms of Service</a>
+    </p>
+  </footer>
 </div>
 
 <div class="tab-page" id="page-store">
@@ -1092,9 +1110,24 @@
   <span>$<span id="floatCartTotal">0.00</span></span>
 </button>
 
+<!-- Terms of Service Modal -->
+<div class="cart-modal-overlay" id="termsModalOverlay" onclick="closeTermsOnOutside(event)">
+  <div class="cart-modal" style="max-height: 80vh; overflow-y: auto;">
+    <div class="modal-header">
+      <h3>📜 Terms of Service</h3>
+      <button class="close-modal-btn" onclick="openTermsModal()">✕</button>
+    </div>
+    <div style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; text-align: left; padding-bottom: 10px;">
+      <p><strong>1. Introduction</strong><br>Welcome to Spicy. By accessing or using our web catalog, you agree to comply with these terms.</p>
+      <p><strong>2. Intellectual Property</strong><br>All source code, UI designs, product databases, custom layouts, and text content displayed on this website are the intellectual property of Spicy. Unauthorized copying, scraping, or redistribution is strictly prohibited.</p>
+      <p><strong>3. Orders & Pricing</strong><br>Prices and availability of spices, nuts, and dry goods are subject to change based on market rates. Orders placed via WhatsApp are subject to final store confirmation.</p>
+    </div>
+    <button class="checkout-btn" onclick="openTermsModal()" style="background: var(--card-border); color: var(--text-main);">Close</button>
+  </div>
+</div>
+
 <div class="cart-modal-overlay" id="cartModalOverlay" onclick="closeModalOnOutsideClick(event)">
   <div class="cart-modal">
-    
     <div class="modal-header">
       <h3 id="modalTitle">🛒 Your Cart</h3>
       <div class="modal-header-actions">
@@ -1204,6 +1237,17 @@
   function closeModalOnOutsideClick(e) {
     if (e.target.id === 'cartModalOverlay') {
       toggleCartModal();
+    }
+  }
+
+  function openTermsModal() {
+    const modal = document.getElementById('termsModalOverlay');
+    modal.classList.toggle('open');
+  }
+
+  function closeTermsOnOutside(e) {
+    if (e.target.id === 'termsModalOverlay') {
+      openTermsModal();
     }
   }
 
@@ -1503,9 +1547,9 @@
       : 'أجود أنواع البهارات والمكسرات والحبوب والمؤونة بالجملة والمفرق في زغرتا.';
     document.getElementById('ctaBtn').innerText = currentLang === 'en' ? 'Shop the Collection!' : 'تصفح المجموعة!';
 
-    document.getElementById('slide1-cap').innerText = currentLang === 'en' ? '🌿 Fresh & Organic Local Herbs & Spices' : '🌿 أعشاب وبهارات محلية طازجة وعضوية';
-    document.getElementById('slide2-cap').innerText = currentLang === 'en' ? '🥜 Premium Roasted Nuts & Dried Fruits' : '🥜 مكسرات محمصة وفواكه مجففة فاخرة';
-    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌾 Fine Grains, Rice & Traditional Pulses' : '🌾 حبوب، أرز، وبقوليات تقليدية فاخرة';
+    document.getElementById('slide1-cap').innerText = currentLang === 'en' ? '🍯 Premium Natural Dates, Figs & Dried Fruits' : '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة';
+    document.getElementById('slide2-cap').innerText = currentLang === 'en' ? '🥜 Freshly Roasted Nuts & Crunchy Snacks' : '🥜 مكسرات محمصة طازجة ومقرمشة';
+    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌿 Authentic Spices & Traditional Pantry Goods' : '🌿 بهارات أصلية ومؤونة تقليدية';
 
     document.getElementById('featTitle').innerText = currentLang === 'en' ? '✨ Premium Quality & Freshness' : '✨ جودة ونضارة عالية';
     document.getElementById('featDesc').innerText = currentLang === 'en' 
