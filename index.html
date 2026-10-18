@@ -287,11 +287,12 @@
     .carousel-container {
       position: relative;
       width: 100%;
-      height: 200px;
+      height: 250px;
       border-radius: 14px;
       overflow: hidden;
       margin-bottom: 20px;
       border: 1px solid var(--card-border);
+      background: #221815; /* Fallback color so it's never an empty black void */
     }
 
     .carousel-slide {
@@ -302,9 +303,9 @@
       height: 100%;
       opacity: 0;
       transition: opacity 0.8s ease-in-out;
-      background-size: cover !important;
-      background-position: center center !important;
-      background-repeat: no-repeat !important;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       display: flex;
       align-items: flex-end;
     }
@@ -312,7 +313,6 @@
     .carousel-slide.active {
       opacity: 1;
     }
-
     .slide-caption {
       width: 100%;
       padding: 12px;
@@ -1745,6 +1745,26 @@
     renderCart();
   }
 
+  function renderCarousel() {
+    // Or whatever your carousel rendering function is named
+    const slides = [
+      { url: './carousel-1.jpg', textEn: '🍯 Premium Natural Dates, Figs & Dried Fruits', textAr: '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة' },
+      { url: './carousel-2.jpg', textEn: '🥜 Freshly Roasted Nuts & Crunchy Snacks', textAr: '🥜 مكسرات محمصة طازجة ومقرمشة' },
+      { url: './carousel-3.jpg', textEn: '🌿 Authentic Spices & Traditional Pantry Goods', textAr: '🌿 بهارات أصلية ومؤونة تقليدية' }
+    ];
+    
+    const container = document.getElementById('carouselContainer');
+    if (!container) return;
+
+    container.innerHTML = slides.map((slide, i) => `
+      <div class="carousel-slide ${i === 0 ? 'active' : ''}" style="background-image: url('${slide.url}'); background-size: cover; background-position: center;">
+        <div class="slide-caption" style="background: rgba(0,0,0,0.6); width: 100%; padding: 8px 12px; color: white; font-size: 0.85rem;">
+          ${currentLang === 'en' ? slide.textEn : slide.textAr}
+        </div>
+      </div>
+    `).join('');
+  }
+  
   function renderCart() {
     const container = document.getElementById('cartItems');
     container.innerHTML = '';
