@@ -749,8 +749,8 @@
     .zoom-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
       z-index: 10002;
       display: none;
       justify-content: center;
@@ -765,18 +765,26 @@
       border: 1px solid var(--card-border);
       border-radius: 16px;
       width: 100%;
-      max-width: 400px;
+      max-width: 520px;
       padding: 20px;
       text-align: center;
       position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .zoom-modal-img {
       width: 100%;
-      height: 220px;
+      height: 320px;
       border-radius: 12px;
       object-fit: cover;
       background: var(--input-bg);
       margin-bottom: 12px;
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+    }
+    .zoom-modal-img.zoomed {
+      transform: scale(1.6);
+      cursor: zoom-out;
     }
 
     .cart-modal-overlay {
@@ -994,7 +1002,7 @@
 
     .rtl { direction: rtl; }
     .rtl .product-card, .rtl .cart-item-row, .rtl .modal-header, .rtl .modal-total { text-align: right; }
-    .rtl .cart-item-right { align-items: flex-start; }
+    .rtl .cart-item-right { margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -1043,7 +1051,7 @@
     <button class="cta-btn" onclick="switchPage('store')" id="ctaBtn">Shop the Collection!</button>
   </div>
 
-  <div class="carousel-container">
+  <div class="carousel-container" id="carouselContainer">
     <div class="carousel-slide active" style="background-image: url('./carousel-1.jpg');">
       <div class="slide-caption" id="slide1-cap">🍯 Premium Natural Dates, Figs & Dried Fruits</div>
     </div>
@@ -1051,7 +1059,7 @@
       <div class="slide-caption" id="slide2-cap">🥜 Freshly Roasted Nuts & Crunchy Snacks</div>
     </div>
     <div class="carousel-slide" style="background-image: url('./carousel-3.jpg');">
-      <div class="slide-caption" id="slide3-cap">🌿 Authentic Spices & Traditional Pantry Goods</div>
+      <div class="slide-caption" id="slide3-cap">🌿 Authentic Dried Fruits & Wholesome Seeds</div>
     </div>
   </div>
 
@@ -1213,6 +1221,8 @@
     'Nuts': { en: 'Nuts', ar: 'مكسرات' },
     'Spices': { en: 'Spices', ar: 'بهارات' },
     'Spice Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Spice Blend': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
     'Flavors': { en: 'Flavors', ar: 'نكهات' }
   };
 
@@ -1322,7 +1332,9 @@
     const overlay = document.getElementById('zoomModalOverlay');
     const content = document.getElementById('zoomModalContent');
     const displayImg = imgUrl && imgUrl.startsWith('http') 
-      ? `<img src="${imgUrl}" class="zoom-modal-img" alt="${title}">` 
+      ? `<div style="overflow:hidden; border-radius:12px; margin-bottom:12px;">
+           <img src="${imgUrl}" class="zoom-modal-img" id="zoomImg" onclick="this.classList.toggle('zoomed')" alt="${title}" title="${currentLang === 'en' ? 'Click to zoom' : 'انقر للتكبير'}">
+         </div>` 
       : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
 
     content.innerHTML = `
@@ -1568,8 +1580,7 @@
 
     document.getElementById('slide1-cap').innerText = currentLang === 'en' ? '🍯 Premium Natural Dates, Figs & Dried Fruits' : '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة';
     document.getElementById('slide2-cap').innerText = currentLang === 'en' ? '🥜 Freshly Roasted Nuts & Crunchy Snacks' : '🥜 مكسرات محمصة طازجة ومقرمشة';
-    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌿 Authentic Spices & Traditional Pantry Goods' : '🌿 بهارات أصلية ومؤونة تقليدية';
-
+    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌿 Authentic Dried Fruits & Wholesome Seeds' : '🌿 فواكه مجففة أصلية وبذور صحية';
     document.getElementById('featTitle').innerText = currentLang === 'en' ? '✨ Premium Quality & Freshness' : '✨ جودة ونضارة عالية';
     document.getElementById('featDesc').innerText = currentLang === 'en' 
       ? 'We carefully select and pack every spice, nut, and grain to ensure high quality and authentic flavor for your kitchen.' 
@@ -1589,6 +1600,13 @@
     document.getElementById('searchInput').placeholder = currentLang === 'en' 
       ? 'Search for spices, nuts, or products...' 
       : 'إبحث عن البهارات، المكسرات، أو المنتجات...';
+
+    document.getElementById('lblCartNote').innerText = currentLang === 'en' 
+      ? 'Special Instructions / Custom Blend Notes:' 
+      : 'ملاحظات خاصة / خلطات حسب الطلب:';
+    document.getElementById('cartNoteInput').placeholder = currentLang === 'en' 
+      ? 'e.g. extra fine grind, less salt...' 
+      : 'مثال: طحين ناعم جداً، ملح أقل...';
     
     document.getElementById('findTitle').innerText = currentLang === 'en' ? '📍 Visit Our Store' : '📍 قم بزيارة متجرنا';
     document.getElementById('findLocLabel').innerHTML = currentLang === 'en' 
@@ -1673,6 +1691,10 @@
       const isDisabled = p.isOut ? 'disabled' : '';
       const fadeStyle = p.isOut ? 'opacity: 0.4;' : '';
 
+      const priceDisplay = p.isOut
+        ? ''
+        : `${basePriceText} <small style="font-size:0.68rem; color:#9ca3af;">/ ${baseUnitLabel}</small>`;
+
       card.innerHTML = `
         <div>
           <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${title.replace(/'/g, "\\'")}', '${displayCategory}', '${p.imgUrl}', ${p.basePrice})">
@@ -1682,7 +1704,7 @@
           <h4 style="${fadeStyle}">${title}</h4>
         </div>
         <div class="card-footer">
-          <div class="price-tag" style="${fadeStyle}">${basePriceText} <small style="font-size:0.68rem; color:#9ca3af;">/ ${baseUnitLabel}</small></div>
+          <div class="price-tag" style="${fadeStyle}">${priceDisplay}</div>
           <div class="card-actions">
             <select class="weight-select" id="weight_${p.id}" ${isDisabled}>
               ${optionsHtml}
@@ -1746,7 +1768,6 @@
   }
 
   function renderCarousel() {
-    // Or whatever your carousel rendering function is named
     const slides = [
       { url: './carousel-1.jpg', textEn: '🍯 Premium Natural Dates, Figs & Dried Fruits', textAr: '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة' },
       { url: './carousel-2.jpg', textEn: '🥜 Freshly Roasted Nuts & Crunchy Snacks', textAr: '🥜 مكسرات محمصة طازجة ومقرمشة' },
