@@ -1508,6 +1508,11 @@
         let imgUrl = '';
         if (cols[5]) {
           imgUrl = cols[5].replace(/"/g, '').trim();
+          // Auto-convert Google Drive share links into direct image URLs
+          const driveMatch = imgUrl.match(/\/file\/d\/([^\/]+)/) || imgUrl.match(/id=([^&]+)/);
+          if (driveMatch && driveMatch[1]) {
+            imgUrl = `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+          }
         }
 
         if (price === 0.00) price = getFallbackPrice(category);
