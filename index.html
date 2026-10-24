@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Spicy</title>
   <style>
@@ -1511,7 +1512,7 @@
           // Auto-convert Google Drive share links into direct image URLs
           const driveMatch = imgUrl.match(/\/file\/d\/([^\/]+)/) || imgUrl.match(/id=([^&]+)/);
           if (driveMatch && driveMatch[1]) {
-            imgUrl = `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+            imgUrl = `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
           }
         }
 
@@ -1687,7 +1688,7 @@
         : p.category;
 
       const imageMarkup = p.imgUrl && p.imgUrl.startsWith('http')
-        ? `<img src="${p.imgUrl}" alt="${title}">`
+        ? `<img src="${p.imgUrl}" alt="${title}" referrerpolicy="no-referrer">`
         : `<span class="placeholder-icon">🌾</span>`;
 
       const btnText = p.isOut 
