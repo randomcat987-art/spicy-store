@@ -1177,6 +1177,11 @@
     
     <div class="cart-items-list" id="cartItems"></div>
 
+    <div class="cart-note-container" style="margin-bottom: 10px;">
+      <label id="lblCustomerName" for="customerNameInput">Name for the Order (Optional):</label>
+      <input type="text" id="customerNameInput" class="cart-note-input" style="height:40px;" placeholder="e.g. Charbel, Marie...">
+    </div>
+
     <div class="cart-note-container">
       <label id="lblCartNote" for="cartNoteInput">Special Instructions / Custom Blend Notes:</label>
       <textarea id="cartNoteInput" class="cart-note-input" placeholder="e.g. extra fine grind, less salt..."></textarea>
@@ -1329,21 +1334,26 @@
     }
   }
 
-  function openZoomModal(title, cat, imgUrl, price) {
+  function openZoomModal(title, cat, imgUrl, price, isOut) {
     const overlay = document.getElementById('zoomModalOverlay');
     const content = document.getElementById('zoomModalContent');
+    
     const displayImg = imgUrl && imgUrl.startsWith('http') 
       ? `<div style="overflow:hidden; border-radius:12px; margin-bottom:12px;">
            <img src="${imgUrl}" class="zoom-modal-img" id="zoomImg" onclick="this.classList.toggle('zoomed')" alt="${title}" title="${currentLang === 'en' ? 'Click to zoom' : 'انقر للتكبير'}">
          </div>` 
       : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
 
+    // Only display price if item is in stock
+    const priceHtml = isOut 
+      ? '' 
+      : `<div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:8px;">$${price.toFixed(2)}</div>`;
+
     content.innerHTML = `
       ${displayImg}
       <div style="font-size:0.75rem; text-transform:uppercase; color:#9ca3af; font-weight:700; margin-bottom:4px;">${cat}</div>
-      <h2 style="margin: 0 0 8px 0; color:white; font-size:1.2rem;">${title}</h2>
-      <div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-bottom:12px;">$${price.toFixed(2)}</div>
-      <p style="color:#9ca3af; font-size:0.88rem; line-height:1.4; margin:0;">${currentLang === 'en' ? 'Freshly sourced and packaged with highest quality standards from our store.' : 'تم اختياره وتعبئته بعناية بأعلى معايير الجودة.'}</p>
+      <h2 style="margin: 0; color:white; font-size:1.2rem; line-height:1.3;">${title}</h2>
+      ${priceHtml}
     `;
     overlay.classList.add('open');
   }
@@ -1607,6 +1617,13 @@
       ? 'Search for spices, nuts, or products...' 
       : 'إبحث عن البهارات، المكسرات، أو المنتجات...';
 
+    document.getElementById('lblCustomerName').innerText = currentLang === 'en' 
+      ? 'Name for the Order (Optional):' 
+      : 'الاسم للطلب (اختياري):';
+    document.getElementById('customerNameInput').placeholder = currentLang === 'en' 
+      ? 'e.g. Charbel, Marie...' 
+      : 'مثال: شربل، ماري...';
+
     document.getElementById('lblCartNote').innerText = currentLang === 'en' 
       ? 'Special Instructions / Custom Blend Notes:' 
       : 'ملاحظات خاصة / خلطات حسب الطلب:';
@@ -1650,9 +1667,42 @@
     const list = document.getElementById('productList');
     list.innerHTML = '';
 
+   // Helper function to normalize text for flexible name-only search
+    function normalizeSearchText(text) {
+      if (!text) return '';
+      return text
+        .toLowerCase()
+        // Arabic character normalization
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        // Stemming equivalents (e.g. dri / dry / dried / dripped)
+        .replace(/dri[ed|pped|ing]+/g, 'dri')
+        .replace(/dry/g, 'dri')
+        .replace(/nut[s]+/g, 'nut')
+        .replace(/spice[s]+/g, 'spice')
+        .replace(/seed[s]+/g, 'seed')
+        .replace(/fruit[s]+/g, 'fruit');
+    }
+
+    const cleanQuery = normalizeSearchText(searchQuery);
+    const queryTokens = cleanQuery.split(/\s+/).filter(Boolean);
+
     const filtered = products.filter(p => {
       const matchesCat = activeCategory === 'ALL' || p.category === activeCategory;
-      const matchesSearch = p.nameEn.toLowerCase().includes(searchQuery) || p.nameAr.includes(searchQuery);
+      
+      if (!cleanQuery) return matchesCat;
+
+      const normEn = normalizeSearchText(p.nameEn);
+      const normAr = normalizeSearchText(p.nameAr);
+
+      // Check if EVERY word typed by the user matches the item's NAME ONLY (English or Arabic)
+      const matchesSearch = queryTokens.every(token => {
+        return normEn.includes(token) || 
+               normAr.includes(token) || 
+               (token.length >= 3 && (normEn.includes(token.substring(0, 3)) || normAr.includes(token.substring(0, 3))));
+      });
+
       return matchesCat && matchesSearch;
     });
 
@@ -1703,7 +1753,7 @@
 
       card.innerHTML = `
         <div>
-          <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${title.replace(/'/g, "\\'")}', '${displayCategory}', '${p.imgUrl}', ${p.basePrice})">
+          <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${title.replace(/'/g, "\\'")}', '${displayCategory}', '${p.imgUrl}', ${p.basePrice}, ${p.isOut})">
             ${imageMarkup}
           </div>
           <div class="card-cat">${displayCategory}</div>
@@ -1847,9 +1897,17 @@
       ? (isAr ? "توصيل (Delivery)" : "Delivery (توصيل)")
       : (isAr ? "استلام من المحل (Pickup)" : "Pickup (استلام)");
 
+    const orderName = document.getElementById('customerNameInput').value.trim();
+
     let text = isAr 
       ? `مرحبا، أريد تقديم طلب جديد [${typeText}]:\n\n` 
       : `Hello! I would like to place a new order [${typeText}]:\n\n`;
+
+    if (orderName) {
+      text = isAr 
+        ? `*الطلب باسم:* ${orderName}\n` + text 
+        : `*Order for:* ${orderName}\n` + text;
+    }
 
     cart.forEach(item => {
       const title = isAr ? item.nameAr : item.nameEn;
@@ -1873,7 +1931,7 @@
     
     cart = [];
     localStorage.removeItem('spicyCart');
-    document.getElementById('cartNoteInput').value = '';
+    document.getElementById('customerNameInput').value = '';
     renderCart();
     toggleCartModal();
   }
