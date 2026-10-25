@@ -258,19 +258,30 @@
       margin-bottom: 20px;
     }
 
+    .home-hero {
+      text-align: center;
+      padding: 32px 18px;
+      background: linear-gradient(rgba(28, 20, 18, 0.75), rgba(28, 20, 18, 0.85)), 
+                  url('hero-bg.jpg') center/cover no-repeat;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+
     .home-hero h1 {
-      font-size: 2.2rem;
+      font-size: 1.65rem;
       color: #f59e0b;
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
       font-weight: 800;
+      line-height: 1.25;
     }
 
     .home-hero p {
       color: #f3f4f6;
-      font-size: 1rem;
+      font-size: 0.9rem;
       line-height: 1.5;
-      max-width: 500px;
-      margin: 0 auto 20px auto;
+      max-width: 480px;
+      margin: 0 auto 22px auto;
     }
 
     .cta-btn {
@@ -408,28 +419,28 @@
 
     .hero {
       text-align: center;
-      margin-top: 20px;
-      margin-bottom: 12px;
+      margin-top: 12px;
+      margin-bottom: 20px;
     }
 
     .hero h1 {
-      margin: 0 0 4px 0;
-      font-size: 2.0rem;
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
       color: var(--accent-gold);
       font-weight: 800;
     }
 
     .hero p {
-      margin: 0 0 16px 0;
+      margin: 0 0 20px 0;
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       line-height: 1.4;
     }
 
     .search-box {
       width: 100%;
       max-width: 480px;
-      margin: 0 auto;
+      margin: 0 auto 20px auto;
       position: relative;
     }
 
@@ -471,36 +482,11 @@
       background: var(--accent-orange);
     }
 
-    .recent-searches {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
-
-    .search-chip {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-
-    .search-chip:hover {
-      color: white;
-      border-color: var(--accent-gold);
-    }
-
     .store-controls {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .category-tabs {
@@ -1102,7 +1088,6 @@
     <div class="search-box">
       <input type="text" id="searchInput" class="search-input" placeholder="Search for spices, nuts, or products..." oninput="handleSearch()">
       <button class="clear-search-btn" id="clearSearchBtn" onclick="clearSearchInput()" title="Clear search">✕</button>
-      <div class="recent-searches" id="recentSearches"></div>
     </div>
   </div>
 
@@ -1380,18 +1365,6 @@
     }
 
     renderProducts();
-
-    clearTimeout(searchDebounceTimer);
-    if (searchQuery.length >= 2) {
-      searchDebounceTimer = setTimeout(() => {
-        if (!recentSearches.includes(searchQuery)) {
-          recentSearches.unshift(searchQuery);
-          if (recentSearches.length > 4) recentSearches.pop();
-          localStorage.setItem('spicyRecentSearches', JSON.stringify(recentSearches));
-          renderRecentSearches();
-        }
-      }, 1000);
-    }
   }
 
   function clearSearchInput() {
@@ -1409,21 +1382,7 @@
     renderProducts();
   }
 
-  function renderRecentSearches() {
-    const container = document.getElementById('recentSearches');
-    if (!container) return;
-    container.innerHTML = '';
-    
-    if (recentSearches.length === 0) return;
-
-    recentSearches.forEach(term => {
-      const chip = document.createElement('div');
-      chip.className = 'search-chip';
-      chip.innerText = `🕒 ${term}`;
-      chip.onclick = () => selectRecentSearch(term);
-      container.appendChild(chip);
-    });
-  }
+  function renderRecentSearches() {}
 
   window.addEventListener('scroll', () => {
     const backToTopBtn = document.getElementById('backToTopBtn');
