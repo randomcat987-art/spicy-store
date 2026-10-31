@@ -1101,6 +1101,16 @@
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line-short"></div></div>
   </div>
+
+  <!-- Missing Item Suggestion Box at bottom of store -->
+  <div class="info-card" style="margin-top: 24px; text-align: center;">
+    <h3 id="lblCatalogSuggestTitle">💡 Can't find what you're looking for?</h3>
+    <p id="lblCatalogSuggestSub" style="margin-bottom: 12px; font-size: 0.85rem; color: var(--text-muted);">Let us know what item is missing and we will bring it to the store!</p>
+    <div style="display: flex; gap: 8px; max-width: 480px; margin: 0 auto; flex-direction: column;">
+      <input type="text" id="catalogSuggestInput" class="cart-note-input" placeholder="e.g. White Chia Seeds, Coconut Oil..." style="height: 42px;">
+      <button class="cta-btn" id="btnSubmitCatalogSuggest" onclick="submitStoreSuggestion()" style="padding: 10px 20px; font-size: 0.9rem;">Submit Suggestion</button>
+    </div>
+  </div>
 </div>
 
 <div class="tab-page" id="page-find">
@@ -1126,7 +1136,17 @@
   <a href="https://wa.me/96171038388" target="_blank" class="contact-link-btn" style="background:#25d366;" id="btnWa">📲 Chat on WhatsApp</a>
   <a href="tel:+96171038388" class="contact-link-btn" id="btnCall">📞 Call Us</a>
   <a href="https://facebook.com/people/Spicyleb/61574015834403" target="_blank" class="contact-link-btn" style="background:#1877f2;" id="btnFb">📘 Follow Spicy.leb on Facebook</a>
-  <a href="https://instagram.com/spicy.leb" target="_blank" class="contact-link-btn" style="background:#c13584;" id="btnIg">📸 Follow @spicy.leb on Instagram</a>
+  <a href="https://instagram.com/spicy.leb" target="_blank" class="contact-link-btn" style="background:#c13584; margin-bottom: 20px;" id="btnIg">📸 Follow @spicy.leb on Instagram</a>
+
+  <!-- Item Suggestion Box on Contact Page -->
+  <div class="info-card" style="margin-top: 10px; text-align: center;">
+    <h3 id="lblContactSuggestTitle">💡 Can't find what you're looking for?</h3>
+    <p id="lblContactSuggestSub" style="margin-bottom: 12px; font-size: 0.85rem; color: var(--text-muted);">Let us know what item is missing and we will bring it to the store!</p>
+    <div style="display: flex; gap: 8px; max-width: 480px; margin: 0 auto; flex-direction: column;">
+      <input type="text" id="contactSuggestInput" class="cart-note-input" placeholder="e.g. White Chia Seeds, Organic Honey..." style="height: 42px;">
+      <button class="cta-btn" id="btnSubmitContactSuggest" onclick="submitStoreSuggestion('contactSuggestInput')" style="padding: 10px 20px; font-size: 0.9rem;">Submit Suggestion</button>
+    </div>
+  </div>
 </div>
 
 <button class="floating-cart-btn" id="floatingCartBtn" style="display:none;" onclick="toggleCartModal()">
@@ -1162,11 +1182,13 @@
     
     <div class="cart-items-list" id="cartItems"></div>
 
+    <!-- Full Name Input (Required) -->
     <div class="cart-note-container" style="margin-bottom: 10px;">
-      <label id="lblCustomerName" for="customerNameInput">Name for the Order (Optional):</label>
-      <input type="text" id="customerNameInput" class="cart-note-input" style="height:40px;" placeholder="e.g. Charbel, Marie...">
+      <label id="lblCustomerName" for="customerNameInput">Full Name for Order <span style="color:#f87171;">*</span>:</label>
+      <input type="text" id="customerNameInput" class="cart-note-input" style="height:40px;" placeholder="e.g. Sarkis Khoury...">
     </div>
 
+    <!-- Special Instructions Field -->
     <div class="cart-note-container">
       <label id="lblCartNote" for="cartNoteInput">Special Instructions / Custom Blend Notes:</label>
       <textarea id="cartNoteInput" class="cart-note-input" placeholder="e.g. extra fine grind, less salt..."></textarea>
@@ -1195,6 +1217,7 @@
 <script>
   const STORE_PHONE = "96171038388";
   const SPREADSHEET_ID = "13oU7HyXIOpSR328p-YESs-2hDWjKJm0x98tWWM8gTH0";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFN0Zsi_J977HkJKBQyk2TUR70sHLiso294FUgPVF5M0pZUz0TXo3xxz8Dnic1V03x/exec";
   const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Products`;
 
   let products = [];
@@ -1207,18 +1230,18 @@
   let searchDebounceTimer = null;
 
   const catTranslations = {
-  'ALL': { en: 'All', ar: 'الكل' },
-  'Dry Goods': { en: 'Dry Goods', ar: 'حبوب ومؤونة' },
-  'Nuts': { en: 'Nuts', ar: 'مكسرات' },
-  'Dried Fruits': { en: 'Dried Fruits', ar: 'فواكه مجففة' },
-  'Spices': { en: 'Spices', ar: 'بهارات' },
-  'Spice Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
-  'Spice Blend': { en: 'Spice Blends', ar: 'خلطات بهارات' },
-  'Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
-  'Flavors': { en: 'Flavors', ar: 'نكهات' },
-  'Sweets': { en: 'Sweets', ar: 'حلويات' },
-  'Candy Bags': { en: 'Candy Bags', ar: 'أكياس بنبون' }
-};
+    'ALL': { en: 'All', ar: 'الكل' },
+    'Dry Goods': { en: 'Dry Goods', ar: 'حبوب ومؤونة' },
+    'Nuts': { en: 'Nuts', ar: 'مكسرات' },
+    'Dried Fruits': { en: 'Dried Fruits', ar: 'فواكه مجففة' },
+    'Spices': { en: 'Spices', ar: 'بهارات' },
+    'Spice Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Spice Blend': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Blends': { en: 'Spice Blends', ar: 'خلطات بهارات' },
+    'Flavors': { en: 'Flavors', ar: 'نكهات' },
+    'Sweets': { en: 'Sweets', ar: 'حلويات' },
+    'Candy Bags': { en: 'Candy Bags', ar: 'أكياس بنبون' }
+  };
 
   const dryGoodsWeightOptions = [
     { grams: 500, labelEn: '500 g', labelAr: '500 غ' },
@@ -1254,9 +1277,7 @@
     const toast = document.getElementById('toastNotification');
     document.getElementById('toastText').innerText = message;
     toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 2000);
+    setTimeout(() => { toast.classList.remove('show'); }, 2000);
   }
 
   window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; });
@@ -1268,9 +1289,7 @@
   }
 
   function closeModalOnOutsideClick(e) {
-    if (e.target.id === 'cartModalOverlay') {
-      toggleCartModal();
-    }
+    if (e.target.id === 'cartModalOverlay') toggleCartModal();
   }
 
   function openTermsModal() {
@@ -1279,9 +1298,7 @@
   }
 
   function closeTermsOnOutside(e) {
-    if (e.target.id === 'termsModalOverlay') {
-      openTermsModal();
-    }
+    if (e.target.id === 'termsModalOverlay') openTermsModal();
   }
 
   function clearEntireCart() {
@@ -1298,28 +1315,13 @@
     const now = new Date();
     const day = now.getDay();
     const hour = now.getHours();
-
     const badgeContainer = document.getElementById('storeStatusBadge');
     if (!badgeContainer) return;
 
-    let isOpen = false;
-    if (day >= 1 && day <= 6 && hour >= 9 && hour < 18) {
-      isOpen = true;
-    }
-
-    if (isOpen) {
-      badgeContainer.innerHTML = `
-        <div class="status-badge open">
-          <div class="status-dot"></div>
-          <span>${currentLang === 'en' ? 'Open Now' : 'مفتوح الآن'}</span>
-        </div>`;
-    } else {
-      badgeContainer.innerHTML = `
-        <div class="status-badge closed">
-          <div class="status-dot"></div>
-          <span>${currentLang === 'en' ? 'Closed – Opens Mon 9 AM' : 'مغلق – يفتح الإثنين 9 صباحاً'}</span>
-        </div>`;
-    }
+    let isOpen = (day >= 1 && day <= 6 && hour >= 9 && hour < 18);
+    badgeContainer.innerHTML = isOpen 
+      ? `<div class="status-badge open"><div class="status-dot"></div><span>${currentLang === 'en' ? 'Open Now' : 'مفتوح الآن'}</span></div>`
+      : `<div class="status-badge closed"><div class="status-dot"></div><span>${currentLang === 'en' ? 'Closed – Opens Mon 9 AM' : 'مغلق – يفتح الإثنين 9 صباحاً'}</span></div>`;
   }
 
   function openZoomModal(title, cat, imgUrl, price, isOut) {
@@ -1332,10 +1334,7 @@
          </div>` 
       : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
 
-    // Only display price if item is in stock
-    const priceHtml = isOut 
-      ? '' 
-      : `<div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:8px;">$${price.toFixed(2)}</div>`;
+    const priceHtml = isOut ? '' : `<div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:8px;">$${price.toFixed(2)}</div>`;
 
     content.innerHTML = `
       ${displayImg}
@@ -1351,37 +1350,21 @@
   }
 
   function closeZoomModalOnOutside(e) {
-    if (e.target.id === 'zoomModalOverlay') {
-      closeZoomModal();
-    }
+    if (e.target.id === 'zoomModalOverlay') closeZoomModal();
   }
 
   function handleSearch() {
     const inputEl = document.getElementById('searchInput');
     const clearBtn = document.getElementById('clearSearchBtn');
     searchQuery = inputEl.value.toLowerCase().trim();
-    
-    if (searchQuery.length > 0) {
-      clearBtn.style.display = 'flex';
-    } else {
-      clearBtn.style.display = 'none';
-    }
-
+    clearBtn.style.display = searchQuery.length > 0 ? 'flex' : 'none';
     renderProducts();
   }
 
   function clearSearchInput() {
-    const inputEl = document.getElementById('searchInput');
-    inputEl.value = '';
+    document.getElementById('searchInput').value = '';
     searchQuery = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
-    renderProducts();
-  }
-
-  function selectRecentSearch(term) {
-    document.getElementById('searchInput').value = term;
-    document.getElementById('clearSearchBtn').style.display = 'flex';
-    searchQuery = term.toLowerCase();
     renderProducts();
   }
 
@@ -1390,12 +1373,8 @@
   window.addEventListener('scroll', () => {
     const backToTopBtn = document.getElementById('backToTopBtn');
     const storePage = document.getElementById('page-store');
-    if (storePage && storePage.classList.contains('active')) {
-      if (window.scrollY > 300) {
-        backToTopBtn.classList.add('visible');
-      } else {
-        backToTopBtn.classList.remove('visible');
-      }
+    if (storePage && storePage.classList.contains('active') && window.scrollY > 300) {
+      backToTopBtn.classList.add('visible');
     } else {
       backToTopBtn.classList.remove('visible');
     }
@@ -1433,10 +1412,7 @@
       backToTopBtn.classList.remove('visible');
     }
 
-    if (pageName === 'find') {
-      checkStoreStatus();
-    }
-
+    if (pageName === 'find') checkStoreStatus();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1481,7 +1457,6 @@
         let imgUrl = '';
         if (cols[5]) {
           imgUrl = cols[5].replace(/"/g, '').trim();
-          // Auto-convert Google Drive share links into direct image URLs
           const driveMatch = imgUrl.match(/\/file\/d\/([^\/]+)/) || imgUrl.match(/id=([^&]+)/);
           if (driveMatch && driveMatch[1]) {
             imgUrl = `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
@@ -1540,30 +1515,49 @@
     });
   }
 
+  function hasProfanity(text) {
+    if (!text) return false;
+    const badWords = [
+      'fuck', 'shit', 'asshole', 'bitch', 'cunt', 'dick', 'bastard', 'slut',
+      'عمى', 'خرة', 'كليب', 'شراميط', 'عرص', 'منيوك', 'كس', 'طيز'
+    ];
+    const clean = text.toLowerCase();
+    return badWords.some(word => clean.includes(word));
+  }
+
   function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
     document.body.classList.toggle('rtl', currentLang === 'ar');
     document.getElementById('langBtn').innerText = currentLang === 'en' ? '🌐 العربية' : '🌐 English';
     
+    // Header Navigation Tabs
     document.getElementById('tab-home').innerText = currentLang === 'en' ? 'Home' : 'الرئيسية';
     document.getElementById('tab-store').innerText = currentLang === 'en' ? 'Store' : 'المتجر';
     document.getElementById('tab-find').innerText = currentLang === 'en' ? 'Find us' : 'موقعنا';
     document.getElementById('tab-contact').innerText = currentLang === 'en' ? 'Contact' : 'تواصل معنا';
 
+    // Home Page Hero & Info
     document.getElementById('homeTitle').innerText = currentLang === 'en' ? 'Welcome to Our Store!' : 'أهلاً بكم في متجرنا!';
     document.getElementById('homeSub').innerText = currentLang === 'en' 
       ? 'Exceptionally Sourced, Thoughtfully Packed. The finest quality spices, artisanal blends, fresh grains, and nuts in Zgharta.' 
       : 'أجود أنواع البهارات والمكسرات والحبوب والمؤونة بالجملة والمفرق في زغرتا.';
     document.getElementById('ctaBtn').innerText = currentLang === 'en' ? 'Shop the Collection!' : 'تصفح المجموعة!';
 
-    document.getElementById('slide1-cap').innerText = currentLang === 'en' ? '🍯 Premium Natural Dates, Figs & Dried Fruits' : '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة';
-    document.getElementById('slide2-cap').innerText = currentLang === 'en' ? '🥜 Freshly Roasted Nuts & Crunchy Snacks' : '🥜 مكسرات محمصة طازجة ومقرمشة';
-    document.getElementById('slide3-cap').innerText = currentLang === 'en' ? '🌿 Authentic Dried Fruits & Wholesome Seeds' : '🌿 فواكه مجففة أصلية وبذور صحية';
+    // Carousel Captions
+    const s1 = document.getElementById('slide1-cap');
+    if (s1) s1.innerText = currentLang === 'en' ? '🍯 Premium Natural Dates, Figs & Dried Fruits' : '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة';
+    const s2 = document.getElementById('slide2-cap');
+    if (s2) s2.innerText = currentLang === 'en' ? '🥜 Freshly Roasted Nuts & Crunchy Snacks' : '🥜 مكسرات محمصة طازجة ومقرمشة';
+    const s3 = document.getElementById('slide3-cap');
+    if (s3) s3.innerText = currentLang === 'en' ? '🌿 Authentic Dried Fruits & Wholesome Seeds' : '🌿 فواكه مجففة أصلية وبذور صحية';
+
+    // Feature Card
     document.getElementById('featTitle').innerText = currentLang === 'en' ? '✨ Premium Quality & Freshness' : '✨ جودة ونضارة عالية';
     document.getElementById('featDesc').innerText = currentLang === 'en' 
       ? 'We carefully select and pack every spice, nut, and grain to ensure high quality and authentic flavor for your kitchen.' 
       : 'نختار ونعبئ كل نوع من البهارات والمكسرات والحبوب بعناية لضمان الجودة والنكهة الأصيلة لمطبخك.';
 
+    // Home Nav Cards
     document.getElementById('navStoreTitle').innerText = currentLang === 'en' ? 'Shop Catalog' : 'تصفح المتجر';
     document.getElementById('navStoreDesc').innerText = currentLang === 'en' ? 'Browse our fresh spices, nuts, and dry goods directly.' : 'تصفح البهارات، المكسرات والحبوب الطازجة مباشرة.';
     document.getElementById('navFindTitle').innerText = currentLang === 'en' ? 'Visit Store' : 'زورونا';
@@ -1571,6 +1565,7 @@
     document.getElementById('navContactTitle').innerText = currentLang === 'en' ? 'Get in Touch' : 'تواصل معنا';
     document.getElementById('navContactDesc').innerText = currentLang === 'en' ? 'Contact us for wholesale or custom requests.' : 'تواصل معنا للطلبات بالجملة أو الخاصة.';
 
+    // Store Page Header & Inputs
     document.getElementById('heroTitle').innerText = currentLang === 'en' ? 'Store Catalog' : 'تصفح المتجر';
     document.getElementById('heroSub').innerText = currentLang === 'en' 
       ? 'Finest quality spices, blends, grains, and nuts.' 
@@ -1579,12 +1574,13 @@
       ? 'Search for spices, nuts, or products...' 
       : 'إبحث عن البهارات، المكسرات، أو المنتجات...';
 
-    document.getElementById('lblCustomerName').innerText = currentLang === 'en' 
-      ? 'Name for the Order (Optional):' 
-      : 'الاسم للطلب (اختياري):';
+    // Cart Inputs
+    document.getElementById('lblCustomerName').innerHTML = currentLang === 'en' 
+      ? 'Full Name for Order <span style="color:#f87171;">*</span>:' 
+      : 'الاسم الكامل للطلب <span style="color:#f87171;">*</span>:';
     document.getElementById('customerNameInput').placeholder = currentLang === 'en' 
-      ? 'e.g. Charbel, Marie...' 
-      : 'مثال: شربل، ماري...';
+      ? 'e.g. Sarkis Khoury...' 
+      : 'مثال: سركيس الخوري...';
 
     document.getElementById('lblCartNote').innerText = currentLang === 'en' 
       ? 'Special Instructions / Custom Blend Notes:' 
@@ -1592,7 +1588,56 @@
     document.getElementById('cartNoteInput').placeholder = currentLang === 'en' 
       ? 'e.g. extra fine grind, less salt...' 
       : 'مثال: طحين ناعم جداً، ملح أقل...';
-    
+
+    // Store Catalog Bottom Suggestion Box
+    const catalogTitle = document.getElementById('lblCatalogSuggestTitle');
+    if (catalogTitle) {
+      catalogTitle.innerText = currentLang === 'en' 
+        ? "💡 Can't find what you're looking for?" 
+        : '💡 مالقيت الشي اللي عم تدور عليه؟';
+    }
+    const catalogSub = document.getElementById('lblCatalogSuggestSub');
+    if (catalogSub) {
+      catalogSub.innerText = currentLang === 'en' 
+        ? "Let us know what item is missing and we will bring it to the store!" 
+        : 'خبرنا شو الناقص وبنجيبلك إياه على المحل!';
+    }
+    const catalogInput = document.getElementById('catalogSuggestInput');
+    if (catalogInput) {
+      catalogInput.placeholder = currentLang === 'en' 
+        ? 'e.g. White Chia Seeds, Organic Honey...' 
+        : 'مثال: بذور الشيا البيضاء، عسل طبيعي...';
+    }
+    const catalogBtn = document.getElementById('btnSubmitCatalogSuggest');
+    if (catalogBtn) {
+      catalogBtn.innerText = currentLang === 'en' ? 'Submit Suggestion' : 'إرسال الاقتراح';
+    }
+
+    // Contact Page Suggestion Box
+    const contactSuggestTitle = document.getElementById('lblContactSuggestTitle');
+    if (contactSuggestTitle) {
+      contactSuggestTitle.innerText = currentLang === 'en' 
+        ? "💡 Can't find what you're looking for?" 
+        : '💡 مالقيت الشي اللي عم تدور عليه؟';
+    }
+    const contactSuggestSub = document.getElementById('lblContactSuggestSub');
+    if (contactSuggestSub) {
+      contactSuggestSub.innerText = currentLang === 'en' 
+        ? "Let us know what item is missing and we will bring it to the store!" 
+        : 'خبرنا شو الناقص وبنجيبلك إياه على المحل!';
+    }
+    const contactSuggestInput = document.getElementById('contactSuggestInput');
+    if (contactSuggestInput) {
+      contactSuggestInput.placeholder = currentLang === 'en' 
+        ? 'e.g. White Chia Seeds, Organic Honey...' 
+        : 'مثال: بذور الشيا البيضاء، عسل طبيعي...';
+    }
+    const contactSuggestBtn = document.getElementById('btnSubmitContactSuggest');
+    if (contactSuggestBtn) {
+      contactSuggestBtn.innerText = currentLang === 'en' ? 'Submit Suggestion' : 'إرسال الاقتراح';
+    }
+
+    // Find Us Page
     document.getElementById('findTitle').innerText = currentLang === 'en' ? '📍 Visit Our Store' : '📍 قم بزيارة متجرنا';
     document.getElementById('findLocLabel').innerHTML = currentLang === 'en' 
       ? '<strong>Location</strong><br>Kfar Hatta Zgharta District, Lebanon' 
@@ -1602,6 +1647,7 @@
       : '🕒 <strong>أوقات العمل:</strong><br>الإثنين – السبت: 9:00 صباحاً – 6:00 مساءً';
     document.getElementById('findMapBtn').innerText = currentLang === 'en' ? '🗺️ Open Directions in Google Maps' : '🗺️ افتح الاتجاهات في خرائط جوجل';
 
+    // Contact Page Buttons & Header
     document.getElementById('contactTitle').innerText = currentLang === 'en' ? '📞 Get in Touch' : '📞 تواصل معنا';
     document.getElementById('contactDesc').innerText = currentLang === 'en' 
       ? 'Have questions about bulk wholesale or custom spice blends? Contact us directly!' 
@@ -1611,6 +1657,7 @@
     document.getElementById('btnFb').innerHTML = currentLang === 'en' ? '📘 Follow Spicy.leb on Facebook' : '📘 تابع Spicy.leb على فيسبوك';
     document.getElementById('btnIg').innerHTML = currentLang === 'en' ? '📸 Follow @spicy.leb on Instagram' : '📸 تابع @spicy.leb على إنستغرام';
 
+    // Modal & Floating Controls
     document.getElementById('floatBtnText').innerText = currentLang === 'en' ? 'View Cart' : 'عرض السلة';
     document.getElementById('modalTitle').innerText = currentLang === 'en' ? '🛒 Your Cart' : '🛒 سلة التسوق الخاصة بك';
     document.getElementById('clearCartBtnText').innerText = currentLang === 'en' ? 'Clear Cart' : 'تفريغ السلة';
@@ -1619,6 +1666,7 @@
     document.getElementById('lblPickup').innerText = currentLang === 'en' ? 'Pickup' : 'استلام من المحل';
     document.getElementById('lblDelivery').innerText = currentLang === 'en' ? 'Delivery' : 'توصيل';
     
+    // Re-render UI
     renderCategoryFilters();
     renderProducts();
     renderCart();
@@ -1629,16 +1677,13 @@
     const list = document.getElementById('productList');
     list.innerHTML = '';
 
-   // Helper function to normalize text for flexible name-only search
     function normalizeSearchText(text) {
       if (!text) return '';
       return text
         .toLowerCase()
-        // Arabic character normalization
         .replace(/[أإآ]/g, 'ا')
         .replace(/ة/g, 'ه')
         .replace(/ى/g, 'ي')
-        // Stemming equivalents (e.g. dri / dry / dried / dripped)
         .replace(/dri[ed|pped|ing]+/g, 'dri')
         .replace(/dry/g, 'dri')
         .replace(/nut[s]+/g, 'nut')
@@ -1652,13 +1697,11 @@
 
     const filtered = products.filter(p => {
       const matchesCat = activeCategory === 'ALL' || p.category === activeCategory;
-      
       if (!cleanQuery) return matchesCat;
 
       const normEn = normalizeSearchText(p.nameEn);
       const normAr = normalizeSearchText(p.nameAr);
 
-      // Check if EVERY word typed by the user matches the item's NAME ONLY (English or Arabic)
       const matchesSearch = queryTokens.every(token => {
         return normEn.includes(token) || 
                normAr.includes(token) || 
@@ -1789,7 +1832,7 @@
     const slides = [
       { url: './carousel-1.jpg', textEn: '🍯 Premium Natural Dates, Figs & Dried Fruits', textAr: '🍯 تمر طبيعي، تين وفواكه مجففة فاخرة' },
       { url: './carousel-2.jpg', textEn: '🥜 Freshly Roasted Nuts & Crunchy Snacks', textAr: '🥜 مكسرات محمصة طازجة ومقرمشة' },
-      { url: './carousel-3.jpg', textEn: '🌿 Authentic Spices & Traditional Pantry Goods', textAr: '🌿 بهارات أصلية ومؤونة تقليدية' }
+      { url: './carousel-3.jpg', textEn: '🌿 Authentic Dried Fruits & Wholesome Seeds', textAr: '🌿 فواكه مجففة أصلية وبذور صحية' }
     ];
     
     const container = document.getElementById('carouselContainer');
@@ -1819,12 +1862,10 @@
           : `${item.selectedGrams} ${currentLang === 'en' ? 'g' : 'غ'}`;
         
         total += item.calculatedPrice;
-
         const vacuumText = currentLang === 'en' ? 'Vacuum Packed' : 'تفريغ هواء';
 
         const row = document.createElement('div');
         row.className = 'cart-item-row';
-        
         row.innerHTML = `
           <div class="cart-item-details">
             <strong style="color: #f3f4f6; font-size: 0.95rem;">${title}</strong> <span style="color:#9ca3af; font-size:0.85rem;">(${weightLabel})</span>
@@ -1848,9 +1889,61 @@
     document.getElementById('modalCartTotal').innerText = total.toFixed(2);
   }
 
+  function submitStoreSuggestion(inputId = 'catalogSuggestInput') {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    
+    const suggestion = inputEl.value.trim();
+    if (!suggestion) {
+      alert(currentLang === 'en' ? 'Please enter an item name to suggest.' : 'الرجاء إدخال اسم صنف للاقتراح.');
+      return;
+    }
+
+    if (hasProfanity(suggestion)) {
+      alert(currentLang === 'en' ? 'Please use appropriate language.' : 'الرجاء استخدام لغة لائقة.');
+      return;
+    }
+
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderName: "Store Browser Suggestion",
+        orderType: "Catalog Suggestion",
+        items: "N/A",
+        total: "0.00",
+        notes: `[Suggested Item: ${suggestion}]`
+      })
+    }).catch(err => console.error("Logging error:", err));
+
+    inputEl.value = '';
+    showToast(currentLang === 'en' ? 'Suggestion sent! Thank you.' : 'تم إرسال الاقتراح! شكراً لك.');
+  }
+
   function checkoutWhatsApp() {
     if (cart.length === 0) {
       alert(currentLang === 'en' ? 'Your cart is empty!' : 'سلة التسوق فارغة!');
+      return;
+    }
+
+    const orderName = document.getElementById('customerNameInput').value.trim();
+
+    if (!orderName || orderName.split(/\s+/).length < 2) {
+      alert(currentLang === 'en' 
+        ? 'Please enter your full name (First and Last Name) to proceed.' 
+        : 'الرجاء إدخال الاسم الكامل (الاسم والكنية) للمتابعة.');
+      return;
+    }
+
+    if (hasProfanity(orderName)) {
+      alert(currentLang === 'en' ? 'Please enter a valid full name.' : 'الرجاء إدخال اسم لائق.');
+      return;
+    }
+
+    const customNote = document.getElementById('cartNoteInput').value.trim();
+    if (hasProfanity(customNote)) {
+      alert(currentLang === 'en' ? 'Please remove inappropriate words from your note.' : 'الرجاء إزالة الكلمات غير اللائقة من الملاحظات.');
       return;
     }
 
@@ -1859,17 +1952,11 @@
       ? (isAr ? "توصيل (Delivery)" : "Delivery (توصيل)")
       : (isAr ? "استلام من المحل (Pickup)" : "Pickup (استلام)");
 
-    const orderName = document.getElementById('customerNameInput').value.trim();
-
     let text = isAr 
       ? `مرحبا، أريد تقديم طلب جديد [${typeText}]:\n\n` 
       : `Hello! I would like to place a new order [${typeText}]:\n\n`;
 
-    if (orderName) {
-      text = isAr 
-        ? `*الطلب باسم:* ${orderName}\n` + text 
-        : `*Order for:* ${orderName}\n` + text;
-    }
+    text = (isAr ? `*الطلب باسم:* ${orderName}\n` : `*Order for:* ${orderName}\n`) + text;
 
     cart.forEach(item => {
       const title = isAr ? item.nameAr : item.nameEn;
@@ -1881,12 +1968,32 @@
       text += `• ${title} (${weightLabel})${vacuumText}\n`;
     });
 
-    const customNote = document.getElementById('cartNoteInput').value.trim();
     if (customNote) {
       text += isAr ? `\n*ملاحظات:* ${customNote}\n` : `\n*Special Notes:* ${customNote}\n`;
     }
 
     text += isAr ? `\n*نوع الطلب:* ${typeText}` : `\n*Order Type:* ${typeText}`;
+
+    const numericTotal = cart.reduce((sum, item) => sum + item.calculatedPrice, 0);
+
+    const orderSummaryList = cart.map((item, idx) => {
+      const weightLabel = item.selectedGrams >= 1000 ? `${item.selectedGrams/1000}kg` : `${item.selectedGrams}g`;
+      const vacuum = item.isVacuumed ? " [Vacuum]" : "";
+      return `${idx + 1}. ${item.nameEn} (${weightLabel})${vacuum}`;
+    }).join("\n");
+
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderName: orderName,
+        orderType: orderType,
+        items: orderSummaryList,
+        total: numericTotal.toFixed(2),
+        notes: customNote
+      })
+    }).catch(err => console.error("Logging error:", err));
 
     const url = `https://wa.me/${STORE_PHONE}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
@@ -1894,6 +2001,7 @@
     cart = [];
     localStorage.removeItem('spicyCart');
     document.getElementById('customerNameInput').value = '';
+    document.getElementById('cartNoteInput').value = '';
     renderCart();
     toggleCartModal();
   }
