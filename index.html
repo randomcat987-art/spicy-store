@@ -517,6 +517,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
+      align-items: start;
     }
 
     @media (min-width: 600px) {
@@ -533,7 +534,6 @@
       padding: 12px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
@@ -571,20 +571,23 @@
     }
 
     .product-card h4 {
-      margin: 0 0 8px 0;
+      margin: 0 0 6px 0;
       font-size: 0.95rem;
       font-weight: 800;
       color: #f3f4f6;
       line-height: 1.25;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card-footer {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
-
     .price-tag {
       font-size: 0.98rem;
       font-weight: 800;
@@ -1149,9 +1152,9 @@
   </div>
 </div>
 
-<button class="floating-cart-btn" id="floatingCartBtn" style="display:none;" onclick="toggleCartModal()">
+<button class="floating-cart-btn" id="floatingCartBtn" style="display:none; justify-content:center;" onclick="toggleCartModal()">
   <span>🛒 <span id="floatBtnText">View Cart</span> (<span id="floatCartCount">0</span>)</span>
-  <span>$<span id="floatCartTotal">0.00</span></span>
+  <span style="display:none;">$<span id="floatCartTotal">0.00</span></span>
 </button>
 
 <!-- Terms of Service Modal -->
@@ -1184,17 +1187,16 @@
 
     <!-- Full Name Input (Required) -->
     <div class="cart-note-container" style="margin-bottom: 10px;">
-      <label id="lblCustomerName" for="customerNameInput">Full Name for Order <span style="color:#f87171;">*</span>:</label>
-      <input type="text" id="customerNameInput" class="cart-note-input" style="height:40px;" placeholder="e.g. Sarkis Khoury...">
+<label id="lblCustomerName" for="customerNameInput">Full Name for Order: <span style="color:#f87171;">*</span></label>      <input type="text" id="customerNameInput" class="cart-note-input" style="height:40px;" placeholder="">
     </div>
 
     <!-- Special Instructions Field -->
     <div class="cart-note-container">
-      <label id="lblCartNote" for="cartNoteInput">Special Instructions / Custom Blend Notes:</label>
-      <textarea id="cartNoteInput" class="cart-note-input" placeholder="e.g. extra fine grind, less salt..."></textarea>
+      <label id="lblCartNote" for="cartNoteInput">Special Instructions:</label>
+      <textarea id="cartNoteInput" class="cart-note-input" placeholder=""></textarea>
     </div>
 
-    <div class="modal-total">
+    <div class="modal-total" style="display:none;">
       <span id="modalTotalLabel">Total</span>
       <span style="color:#f59e0b;">$<span id="modalCartTotal">0.00</span></span>
     </div>
@@ -1334,7 +1336,7 @@
          </div>` 
       : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
 
-    const priceHtml = isOut ? '' : `<div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:8px;">$${price.toFixed(2)}</div>`;
+    const priceHtml = '';
 
     content.innerHTML = `
       ${displayImg}
@@ -1576,18 +1578,18 @@
 
     // Cart Inputs
     document.getElementById('lblCustomerName').innerHTML = currentLang === 'en' 
-      ? 'Full Name for Order <span style="color:#f87171;">*</span>:' 
-      : 'الاسم الكامل للطلب <span style="color:#f87171;">*</span>:';
+  ? 'Full Name for Order: <span style="color:#f87171;">*</span>' 
+  : 'الاسم الكامل للطلب: <span style="color:#f87171;">*</span>';
     document.getElementById('customerNameInput').placeholder = currentLang === 'en' 
-      ? 'e.g. Sarkis Khoury...' 
-      : 'مثال: سركيس الخوري...';
+      ? '' 
+      : ''
 
     document.getElementById('lblCartNote').innerText = currentLang === 'en' 
-      ? 'Special Instructions / Custom Blend Notes:' 
-      : 'ملاحظات خاصة / خلطات حسب الطلب:';
+      ? 'Special Instructions:' 
+      : 'ملاحظات خاصة:';
     document.getElementById('cartNoteInput').placeholder = currentLang === 'en' 
-      ? 'e.g. extra fine grind, less salt...' 
-      : 'مثال: طحين ناعم جداً، ملح أقل...';
+      ? '' 
+      : '';
 
     // Store Catalog Bottom Suggestion Box
     const catalogTitle = document.getElementById('lblCatalogSuggestTitle');
@@ -1747,7 +1749,7 @@
         : `<span class="placeholder-icon">🌾</span>`;
 
       const btnText = p.isOut 
-        ? (currentLang === 'en' ? 'Out of Stock' : 'نفدت الكمية') 
+        ? (currentLang === 'en' ? 'Sold Out' : 'نفدت الكمية') 
         : (currentLang === 'en' ? 'Add' : 'إضافة');
       const isDisabled = p.isOut ? 'disabled' : '';
       const fadeStyle = p.isOut ? 'opacity: 0.4;' : '';
@@ -1765,7 +1767,6 @@
           <h4 style="${fadeStyle}">${title}</h4>
         </div>
         <div class="card-footer">
-          <div class="price-tag" style="${fadeStyle}">${priceDisplay}</div>
           <div class="card-actions">
             <select class="weight-select" id="weight_${p.id}" ${isDisabled}>
               ${optionsHtml}
@@ -1869,7 +1870,6 @@
         row.innerHTML = `
           <div class="cart-item-details">
             <strong style="color: #f3f4f6; font-size: 0.95rem;">${title}</strong> <span style="color:#9ca3af; font-size:0.85rem;">(${weightLabel})</span>
-            <div style="color:#f59e0b; font-weight:bold; font-size:0.95rem; margin-top: 4px;">$${item.calculatedPrice.toFixed(2)}</div>
           </div>
           <div class="cart-item-right">
             <label class="vacuum-item-label">
@@ -1990,7 +1990,7 @@
         orderName: orderName,
         orderType: orderType,
         items: orderSummaryList,
-        total: numericTotal.toFixed(2),
+        total: "N/A",
         notes: customNote
       })
     }).catch(err => console.error("Logging error:", err));
