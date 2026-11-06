@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <title>Spicy</title>
   <style>
     :root {
@@ -23,13 +26,16 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html, body, button, input, select, textarea {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
     html, body {
       background-color: var(--bg);
       color: var(--text-main);
       margin: 0;
       padding: 12px;
       padding-bottom: 24px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow-x: hidden;
     }
 
@@ -190,6 +196,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45)
     }
 
     .top-bar {
@@ -244,18 +251,20 @@
       display: none;
     }
 
-    .tab-page.active {
-      display: block;
+    @keyframes pageFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .home-hero {
-      text-align: center;
-      padding: 40px 16px;
-      background: linear-gradient(rgba(28, 20, 18, 0.75), rgba(28, 20, 18, 0.85)), 
-                  url('hero-bg.jpg') center/cover no-repeat;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      margin-bottom: 20px;
+    .tab-page.active {
+      display: block;
+      animation: pageFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .home-hero {
@@ -391,8 +400,8 @@
       justify-content: center;
       gap: 8px;
       width: 100%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: #332521;
+      border: 1px solid #4a3732;
       color: var(--text-main);
       padding: 12px;
       border-radius: 10px;
@@ -400,6 +409,15 @@
       font-weight: bold;
       text-decoration: none;
       margin-bottom: 10px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .contact-link-btn:hover {
+      background: #3d2c27;
+      border-color: var(--accent-gold);
+      color: #f59e0b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
     }
 
     .map-frame-container {
@@ -456,6 +474,11 @@
       text-align: center;
     }
 
+    .search-input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(217, 119, 6, 0.35);
+    }
+
     .search-input::placeholder {
       color: #6b7280;
     }
@@ -497,20 +520,28 @@
     }
 
     .cat-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: #d1d5db;
+      background: #332521;
+      border: 1px solid #4a3732;
+      color: #e5e7eb;
       padding: 8px 18px;
       border-radius: 20px;
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    .cat-btn:hover {
+      background: #3d2c27;
+      border-color: var(--accent-gold);
+      color: white;
     }
 
     .cat-btn.active {
       background: var(--accent-gold);
       color: white;
       border-color: var(--accent-gold);
+      box-shadow: 0 3px 10px rgba(217, 119, 6, 0.4);
     }
 
     .product-grid {
@@ -535,12 +566,20 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      border-color: #57372d;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
     }
 
     .img-container {
       width: 100%;
       height: 120px;
-      background: var(--input-bg);
+      background: radial-gradient(circle at center, #2e1d18 0%, #140d0c 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 10px;
       display: flex;
       justify-content: center;
@@ -675,9 +714,15 @@
       gap: 6px;
     }
 
-    .toast-notification.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
+    @keyframes toastCheckPop {
+      0% { transform: scale(0.3); opacity: 0; }
+      70% { transform: scale(1.4); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .toast-notification.show span:first-child {
+      display: inline-block;
+      animation: toastCheckPop 0.35s ease-out forwards;
     }
 
     .floating-cart-btn {
@@ -939,6 +984,12 @@
       outline: none;
       resize: none;
       height: 50px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cart-note-input:focus {
+      border-color: var(--accent-gold) !important;
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.3);
     }
 
     .modal-total {
@@ -966,14 +1017,21 @@
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.25s ease-in-out;
+    }
+
+    .order-type-btn:hover {
+      border-color: var(--card-border);
+      color: white;
     }
 
     .order-type-btn.active {
       background: #382a26;
       color: #f59e0b;
       border-color: #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+      transform: translateY(-1px);
     }
-
     .checkout-btn {
       width: 100%;
       background: #25d366;
@@ -993,6 +1051,146 @@
     .rtl { direction: rtl; }
     .rtl .product-card, .rtl .cart-item-row, .rtl .modal-header, .rtl .modal-total { text-align: right; }
     .rtl .cart-item-right { margin-top: 6px; }
+
+    /* Card Fade & Lift Animations */
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.product-card {
+  animation: gridFadeIn 0.3s ease-out forwards;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: #57372d;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Cart Badge Pop/Bounce Animation */
+@keyframes badgeBounce {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35) rotate(-6deg); }
+  65% { transform: scale(0.92) rotate(3deg); }
+  100% { transform: scale(1); }
+}
+
+.cart-bounce {
+  animation: badgeBounce 0.45s ease-in-out;
+}
+
+/* Zoom Modal Opening Animation */
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.zoom-modal-overlay.open .zoom-modal-card {
+  animation: modalPop 0.25s ease-out forwards;
+}
+
+/* Search Bar Glow on Focus */
+.search-input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 14px rgba(217, 119, 6, 0.35);
+}
+
+/* Interactive Button Click Feedback */
+.add-btn:active, .cta-btn:active, .nav-tab-btn:active {
+  transform: scale(0.93);
+}
+
+/* Header Drop Shadow */
+.site-header {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+/* Custom Typography for Brand, Headings & Buttons */
+    .brand-logo,
+    .home-hero h1,
+    .hero h1,
+    .info-card h3,
+    .product-card h4,
+    .nav-tab-btn,
+    .cat-btn,
+    .cta-btn,
+    .contact-link-btn,
+    .checkout-btn,
+    .modal-header h3 {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .brand-logo {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .home-hero h1, .hero h1 {
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .product-card h4 {
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    /* Typography Fine-Tuning */
+    .brand-logo,
+    .home-hero h1,
+    .hero h1,
+    .info-card h3,
+    .product-card h4,
+    .nav-card h3,
+    .modal-header h3 {
+      font-weight: 800;
+      letter-spacing: -0.015em;
+    }
+
+    .home-hero p,
+    .hero p,
+    .info-card p,
+    .nav-card p,
+    .card-cat,
+    #findLocLabel,
+    #findHoursLabel,
+    #contactDesc,
+    #lblCatalogSuggestSub,
+    #lblContactSuggestSub {
+      font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+
+    .nav-tab-btn,
+    .cat-btn,
+    .cta-btn,
+    .contact-link-btn,
+    .checkout-btn,
+    .add-btn,
+    .order-type-btn {
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .search-input,
+    .cart-note-input,
+    .weight-select {
+      font-weight: 500;
+    }
+    
   </style>
 </head>
 <body>
@@ -1217,6 +1415,21 @@
 </div>
 
 <script>
+
+  function triggerCartBounce() {
+    const badge = document.querySelector('.cart-badge-btn');
+    const floatBtn = document.getElementById('floatingCartBtn');
+    
+    badge.classList.remove('cart-bounce');
+    floatBtn.classList.remove('cart-bounce');
+    
+    // Trigger reflow to restart animation
+    void badge.offsetWidth;
+    
+    badge.classList.add('cart-bounce');
+    floatBtn.classList.add('cart-bounce');
+  }
+
   const STORE_PHONE = "96171038388";
   const SPREADSHEET_ID = "13oU7HyXIOpSR328p-YESs-2hDWjKJm0x98tWWM8gTH0";
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFN0Zsi_J977HkJKBQyk2TUR70sHLiso294FUgPVF5M0pZUz0TXo3xxz8Dnic1V03x/exec";
@@ -1224,7 +1437,6 @@
 
   let products = [];
   let cart = JSON.parse(localStorage.getItem('spicyCart')) || [];
-  let recentSearches = JSON.parse(localStorage.getItem('spicyRecentSearches')) || [];
   let currentLang = 'en';
   let activeCategory = 'ALL';
   let searchQuery = '';
@@ -1326,23 +1538,28 @@
       : `<div class="status-badge closed"><div class="status-dot"></div><span>${currentLang === 'en' ? 'Closed – Opens Mon 9 AM' : 'مغلق – يفتح الإثنين 9 صباحاً'}</span></div>`;
   }
 
-  function openZoomModal(title, cat, imgUrl, price, isOut) {
+  function openZoomModal(productId) {
+    const p = products.find(item => item.id === productId);
+    if (!p) return;
+
     const overlay = document.getElementById('zoomModalOverlay');
     const content = document.getElementById('zoomModalContent');
     
-    const displayImg = imgUrl && imgUrl.startsWith('http') 
+    const title = currentLang === 'en' ? p.nameEn : p.nameAr;
+    const displayCategory = catTranslations[p.category] 
+      ? (currentLang === 'en' ? catTranslations[p.category].en : catTranslations[p.category].ar)
+      : p.category;
+
+    const displayImg = p.imgUrl && p.imgUrl.startsWith('http') 
       ? `<div style="overflow:hidden; border-radius:12px; margin-bottom:12px;">
-           <img src="${imgUrl}" class="zoom-modal-img" id="zoomImg" onclick="this.classList.toggle('zoomed')" alt="${title}" title="${currentLang === 'en' ? 'Click to zoom' : 'انقر للتكبير'}">
+           <img src="${p.imgUrl}" class="zoom-modal-img" id="zoomImg" onclick="this.classList.toggle('zoomed')" alt="${title}" title="${currentLang === 'en' ? 'Click to zoom' : 'انقر للتكبير'}">
          </div>` 
       : `<div class="zoom-modal-img" style="display:flex; align-items:center; justify-content:center; font-size:4rem;">🌾</div>`;
 
-    const priceHtml = '';
-
     content.innerHTML = `
       ${displayImg}
-      <div style="font-size:0.75rem; text-transform:uppercase; color:#9ca3af; font-weight:700; margin-bottom:4px;">${cat}</div>
+      <div style="font-size:0.75rem; text-transform:uppercase; color:#9ca3af; font-weight:700; margin-bottom:4px;">${displayCategory}</div>
       <h2 style="margin: 0; color:white; font-size:1.2rem; line-height:1.3;">${title}</h2>
-      ${priceHtml}
     `;
     overlay.classList.add('open');
   }
@@ -1360,7 +1577,11 @@
     const clearBtn = document.getElementById('clearSearchBtn');
     searchQuery = inputEl.value.toLowerCase().trim();
     clearBtn.style.display = searchQuery.length > 0 ? 'flex' : 'none';
-    renderProducts();
+
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      renderProducts();
+    }, 250);
   }
 
   function clearSearchInput() {
@@ -1369,8 +1590,6 @@
     document.getElementById('clearSearchBtn').style.display = 'none';
     renderProducts();
   }
-
-  function renderRecentSearches() {}
 
   window.addEventListener('scroll', () => {
     const backToTopBtn = document.getElementById('backToTopBtn');
@@ -1436,8 +1655,9 @@
     }
   }
 
-  function parseCSV(text) {
-    const lines = text.split('\n');
+ function parseCSV(text) {
+    // Regex line split prevents breaking when cells contain internal line breaks
+    const lines = text.split(/\r?\n(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/);
     products = [];
     
     for (let i = 1; i < lines.length; i++) {
@@ -1470,7 +1690,11 @@
         let baseGrams = 200;
         if (unitRaw.includes("1 kg") || category === "Dry Goods") baseGrams = 1000;
 
-        let isOut = cols.some(c => c && c.replace(/"/g, '').trim().toUpperCase() === 'OUT');
+        // Specifically target Column 7 (index 6) for stock status
+        let isOut = false;
+        if (cols[6]) {
+          isOut = cols[6].replace(/"/g, '').trim().toUpperCase() === 'OUT';
+        }
 
         products.push({
           id: id,
@@ -1760,7 +1984,7 @@
 
       card.innerHTML = `
         <div>
-          <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${title.replace(/'/g, "\\'")}', '${displayCategory}', '${p.imgUrl}', ${p.basePrice}, ${p.isOut})">
+          <div class="img-container" style="${fadeStyle}" onclick="openZoomModal('${p.id}')">
             ${imageMarkup}
           </div>
           <div class="card-cat">${displayCategory}</div>
@@ -1807,6 +2031,9 @@
       btnEl.classList.remove('added');
       btnEl.innerText = currentLang === 'en' ? 'Add' : 'إضافة';
     }, 1000);
+
+    // Trigger visual pop animation on cart badge & floating button
+    triggerCartBounce();
 
     const itemName = currentLang === 'en' ? item.nameEn : item.nameAr;
     showToast(currentLang === 'en' ? `Added ${itemName} to cart!` : `تمت إضافة ${itemName} إلى السلة!`);
@@ -2007,7 +2234,6 @@
   }
 
   renderCart();
-  renderRecentSearches();
   loadInventory();
   startCarousel();
 </script>
